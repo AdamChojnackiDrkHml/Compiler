@@ -7,15 +7,15 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface zad2Listener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link zad2Parser#start}.
+	 * Enter a parse tree produced by {@link zad2Parser#dupa}.
 	 * @param ctx the parse tree
 	 */
-	void enterStart(zad2Parser.StartContext ctx);
+	void enterDupa(zad2Parser.DupaContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link zad2Parser#start}.
+	 * Exit a parse tree produced by {@link zad2Parser#dupa}.
 	 * @param ctx the parse tree
 	 */
-	void exitStart(zad2Parser.StartContext ctx);
+	void exitDupa(zad2Parser.DupaContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Nothing}
 	 * labeled alternative in {@link zad2Parser#line}.
@@ -75,17 +75,17 @@ public interface zad2Listener extends ParseTreeListener {
 	 */
 	void exitNumer(zad2Parser.NumerContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code MulDivMod}
+	 * Enter a parse tree produced by the {@code MulDiv}
 	 * labeled alternative in {@link zad2Parser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterMulDivMod(zad2Parser.MulDivModContext ctx);
+	void enterMulDiv(zad2Parser.MulDivContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code MulDivMod}
+	 * Exit a parse tree produced by the {@code MulDiv}
 	 * labeled alternative in {@link zad2Parser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitMulDivMod(zad2Parser.MulDivModContext ctx);
+	void exitMulDiv(zad2Parser.MulDivContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code AddSub}
 	 * labeled alternative in {@link zad2Parser#expression}.
@@ -122,4 +122,52 @@ public interface zad2Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParentheses(zad2Parser.ParenthesesContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code APwrMulDiv}
+	 * labeled alternative in {@link zad2Parser#afterpwr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAPwrMulDiv(zad2Parser.APwrMulDivContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code APwrMulDiv}
+	 * labeled alternative in {@link zad2Parser#afterpwr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAPwrMulDiv(zad2Parser.APwrMulDivContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code APwrNumer}
+	 * labeled alternative in {@link zad2Parser#afterpwr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAPwrNumer(zad2Parser.APwrNumerContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code APwrNumer}
+	 * labeled alternative in {@link zad2Parser#afterpwr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAPwrNumer(zad2Parser.APwrNumerContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code APwrAddSub}
+	 * labeled alternative in {@link zad2Parser#afterpwr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAPwrAddSub(zad2Parser.APwrAddSubContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code APwrAddSub}
+	 * labeled alternative in {@link zad2Parser#afterpwr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAPwrAddSub(zad2Parser.APwrAddSubContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code APwrParentheses}
+	 * labeled alternative in {@link zad2Parser#afterpwr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAPwrParentheses(zad2Parser.APwrParenthesesContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code APwrParentheses}
+	 * labeled alternative in {@link zad2Parser#afterpwr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAPwrParentheses(zad2Parser.APwrParenthesesContext ctx);
 }

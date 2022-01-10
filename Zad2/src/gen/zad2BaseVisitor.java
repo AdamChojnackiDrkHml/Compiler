@@ -16,7 +16,7 @@ public class zad2BaseVisitor<T> extends AbstractParseTreeVisitor<T> implements z
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStart(zad2Parser.StartContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDupa(zad2Parser.DupaContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -58,7 +58,7 @@ public class zad2BaseVisitor<T> extends AbstractParseTreeVisitor<T> implements z
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitMulDivMod(zad2Parser.MulDivModContext ctx) { return visitChildren(ctx); }
+	@Override public T visitMulDiv(zad2Parser.MulDivContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -80,4 +80,32 @@ public class zad2BaseVisitor<T> extends AbstractParseTreeVisitor<T> implements z
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitParentheses(zad2Parser.ParenthesesContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitAPwrMulDiv(zad2Parser.APwrMulDivContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitAPwrNumer(zad2Parser.APwrNumerContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitAPwrAddSub(zad2Parser.APwrAddSubContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitAPwrParentheses(zad2Parser.APwrParenthesesContext ctx) { return visitChildren(ctx); }
 }

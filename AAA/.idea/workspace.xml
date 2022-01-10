@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10f3bfae-e517-4690-a7d4-52facbee03ce" name="Changes" comment="" />
+    <list default="true" id="10f3bfae-e517-4690-a7d4-52facbee03ce" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../Zad1/lex.yy.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Zad1/lex.yy.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Zad1/utils.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Zad1/utils.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Zad1/utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Zad1/utils.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Zad1/zad3" beforeDir="false" afterPath="$PROJECT_DIR$/../Zad1/zad3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Zad1/zad3.l" beforeDir="false" afterPath="$PROJECT_DIR$/../Zad1/zad3.l" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Zad1/zad3.tab.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Zad1/zad3.tab.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Zad1/zad3.tab.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Zad1/zad3.tab.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Zad1/zad3.y" beforeDir="false" afterPath="$PROJECT_DIR$/../Zad1/zad3.y" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,6 +48,7 @@
       <option name="presentableId" value="Default" />
       <updated>1638103617901</updated>
       <workItem from="1638103619587" duration="167000" />
+      <workItem from="1638363963865" duration="13000" />
     </task>
     <servers />
   </component>

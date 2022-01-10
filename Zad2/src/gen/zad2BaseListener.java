@@ -15,13 +15,13 @@ public class zad2BaseListener implements zad2Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStart(zad2Parser.StartContext ctx) { }
+	@Override public void enterDupa(zad2Parser.DupaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStart(zad2Parser.StartContext ctx) { }
+	@Override public void exitDupa(zad2Parser.DupaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -87,13 +87,13 @@ public class zad2BaseListener implements zad2Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMulDivMod(zad2Parser.MulDivModContext ctx) { }
+	@Override public void enterMulDiv(zad2Parser.MulDivContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMulDivMod(zad2Parser.MulDivModContext ctx) { }
+	@Override public void exitMulDiv(zad2Parser.MulDivContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -130,6 +130,54 @@ public class zad2BaseListener implements zad2Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParentheses(zad2Parser.ParenthesesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAPwrMulDiv(zad2Parser.APwrMulDivContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAPwrMulDiv(zad2Parser.APwrMulDivContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAPwrNumer(zad2Parser.APwrNumerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAPwrNumer(zad2Parser.APwrNumerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAPwrAddSub(zad2Parser.APwrAddSubContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAPwrAddSub(zad2Parser.APwrAddSubContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAPwrParentheses(zad2Parser.APwrParenthesesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAPwrParentheses(zad2Parser.APwrParenthesesContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

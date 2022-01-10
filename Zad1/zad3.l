@@ -21,7 +21,6 @@
 \-                              return MINUS;
 \*                              return MULT;
 \/                              return DIV;
-\%                              return MOD;
 \^                              return PWR;
 \(                              return LBRACKET;
 \)                              return RBRACKET;

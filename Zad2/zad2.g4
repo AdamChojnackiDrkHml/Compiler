@@ -23,26 +23,33 @@ NUMBER: [0-9]+;
 
 
 // Rules
-start
-   : start line
+dupa
+   : dupa line
    | EOF?;
 
 line
-   : ENDLINE #Nothing
-   | COMMENT comment #Commentary
-   | expression ENDLINE #Print
-   ;
+    : ENDLINE #Nothing
+    | COMMENT comment #Commentary
+    | expression ENDLINE #Print
+    ;
 
 comment
     : BACKSLASH ENDLINE|EOF comment
-    | (CHARACTERS|NUMBER|PWR|ADD|SUB|DIV|MUL|MOD|COMMENT|LBRACKET|RBRACKET|WHITESPACE) comment
+    | (CHARACTERS|NUMBER|PWR|ADD|SUB|DIV|MUL|COMMENT|LBRACKET|RBRACKET|WHITESPACE) comment
     | ENDLINE
     ;
 
 expression
-   : operator=SUB? NUMBER #Numer
-   | LBRACKET inner=expression RBRACKET #Parentheses
-   | left=expression operator=PWR right=expression #Pwr
-   | left=expression operator=(MUL|DIV|MOD) right=expression # MulDivMod
-   | left=expression operator=(ADD|SUB) right=expression # AddSub
-   ;
+    : operator=SUB? NUMBER #Numer
+    | LBRACKET inner=expression RBRACKET #Parentheses
+    | left=afterpwr operator=PWR right=afterpwr #Pwr
+    | left=expression operator=(MUL|DIV) right=expression # MulDiv
+    | left=expression operator=(ADD|SUB) right=expression # AddSub
+    ;
+
+afterpwr
+    : operator=SUB? NUMBER #APwrNumer
+    | LBRACKET inner=afterpwr RBRACKET #APwrParentheses
+    | left=afterpwr operator=(MUL|DIV) right=afterpwr # APwrMulDiv
+    | left=afterpwr operator=(ADD|SUB) right=afterpwr # APwrAddSub
+    ;

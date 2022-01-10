@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+ 
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Nov 28 12:38:35 2021
+# Make data base, printed on Sat Jan  8 18:15:07 2022
 
 # Variables
 
@@ -19,7 +21,7 @@ NO_AT_BRIDGE = 1
 # environment
 GTK_RC_FILES = /etc/gtk/gtkrc:/home/adam/.gtkrc:/home/adam/.config/gtkrc
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-8e3560e8-bd6a-4534-959b-6d992215ae38.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-515224b8-aa60-481a-9bbc-3e8e03c6558a.sock
 # environment
 LC_NAME = pl_PL.UTF-8
 # environment
@@ -44,8 +46,6 @@ PWD = /home/adam/Uczelnia/JFTT/L3
 %D = $(patsubst %/,%,$(dir $%))
 # environment
 MAIL = /var/spool/mail/adam
-# environment
-XDG_DATA_DIRS = /home/adam/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # environment
@@ -53,7 +53,7 @@ VSCODE_LOG_STACK = false
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = /home/adam/.config/Code/CachedData/ccbaa2d27e38e5afa3e5c21c1c7bef4657064247
+VSCODE_CODE_CACHE_PATH = /home/adam/.config/Code/CachedData/899d46d82c4c95423fb7e10e68eba52050e30ba3
 # environment
 XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session0
 # environment
@@ -81,31 +81,29 @@ MFLAGS = -pqrR
 # default
 .SHELLFLAGS := -c
 # environment
-QT_LINUX_ACCESSIBILITY_ALWAYS_ON = 1
-# environment
 XDG_CONFIG_DIRS = /home/adam/.config/kdedefaults:/etc/xdg
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
-XCURSOR_THEME = breeze_cursors
+XCURSOR_THEME = Layan-white-cursors
 # environment
 XDG_SESSION_DESKTOP = KDE
 # environment
 VSCODE_CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=fb2f47af-abf1-4e78-8c7f-7425f4455ac6&iid=fb2f47af-abf1-4e78-8c7f-7425f4455ac6&sid=fb2f47af-abf1-4e78-8c7f-7425f4455ac6","uploadToServer":true}
-# makefile (from 'Makefile', line 1)
-MAKEFILE_LIST := Makefile
+# makefile
+MAKEFILE_LIST := 
 # automatic
 @F = $(notdir $@)
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 3664
+VSCODE_PID = 16353
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/CSW:@/tmp/.ICE-unix/1126,unix/CSW:/tmp/.ICE-unix/1126
+SESSION_MANAGER = local/CSW:@/tmp/.ICE-unix/1316,unix/CSW:/tmp/.ICE-unix/1316
 # automatic
 *F = $(notdir $*)
 # environment
@@ -125,13 +123,13 @@ SHELL = /bin/sh
 # default
 MAKECMDGOALS := all
 # environment
-SHLVL = 0
+SHLVL = 2
 # environment
 MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-PATH = /home/adam/.local/bin:/home/adam/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/var/lib/snapd/snap/bin:/usr/lib/jvm/default/bin:/home/adam/.cabal/bin:/home/adam/.ghcup/bin
+PATH = /usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/var/lib/snapd/snap/bin
 # default
 MAKEFILES := 
 # environment
@@ -156,8 +154,6 @@ KDE_APPLICATIONS_AS_SCOPE = 1
 XDG_SEAT = seat0
 # environment
 XDG_CURRENT_DESKTOP = KDE
-# environment
-LS_COLORS = 
 # automatic
 +F = $(notdir $+)
 # environment
@@ -169,17 +165,13 @@ ORIGINAL_XDG_CURRENT_DESKTOP = KDE
 # 'override' directive
 GNUMAKEFLAGS := 
 # environment
-BROWSER = /usr/bin/firefox
-# environment
 LOGNAME = adam
 # environment
 XDG_VTNR = 1
 # makefile
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL := 
 # environment
-SYSTEMD_EXEC_PID = 1016
-# environment
-EDITOR = /usr/bin/nano
+SYSTEMD_EXEC_PID = 1004
 # environment
 DISPLAY = :0
 # environment
@@ -209,7 +201,7 @@ HOME = /home/adam
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-6339429b-1.62.3-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-6339429b-1.63.2-main.sock
 # environment
 XDG_SESSION_ID = 1
 # environment
@@ -231,7 +223,7 @@ KDE_FULL_SESSION = true
 # environment
 LC_IDENTIFICATION = pl_PL.UTF-8
 # variable set hash-table stats:
-# Load=110/1024=11%, Rehash=0, Collisions=6/143=4%
+# Load=105/1024=10%, Rehash=0, Collisions=6/132=5%
 
 # Pattern-specific Variable Values
 
@@ -239,9 +231,9 @@ LC_IDENTIFICATION = pl_PL.UTF-8
 
 # Directories
 
-# . (device 2051, inode 8525438): 13 files, no impossibilities.
+# . (device 2051, inode 8525438): 8 files, no impossibilities.
 
-# 13 files, no impossibilities in 1 directories.
+# 8 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -252,44 +244,9 @@ LC_IDENTIFICATION = pl_PL.UTF-8
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-11-27 16:12:08.086692174
-#  File has been updated.
-#  Successfully updated.
-
-clean:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'Makefile', line 11):
-	rm *.tab.* zad3 lex.yy.c
-
-flex:
-#  Implicit rule search has not been done.
-#  Implicit/static pattern stem: ''
 #  File does not exist.
 #  File has been updated.
-#  Needs to be updated (-q is set).
-# automatic
-# @ := flex
-# automatic
-# * := 
-# automatic
-# < := 
-# automatic
-# + := 
-# automatic
-# % := 
-# automatic
-# ^ := 
-# automatic
-# ? := 
-# automatic
-# | := 
-# variable set hash-table stats:
- 
-# Load=8/32=25%, Rehash=0, Collisions=1/11=9%
-#  recipe to execute (from 'Makefile', line 5):
-	flex zad3.l
+#  Failed to be updated.
 
 # Not a target:
 .DEFAULT:
@@ -297,44 +254,42 @@ flex:
 #  Modification time never checked.
 #  File has not been updated.
 
-all: flex bison
+# Not a target:
+all:
 #  Command line target.
-#  Implicit rule search has not been done.
+#  Implicit rule search has been done.
 #  File does not exist.
-#  File has been updated.
-#  Needs to be updated (-q is set).
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/3=0%
-#  recipe to execute (from 'Makefile', line 2):
-	gcc zad3.tab.c lex.yy.c utils.c -lm -o zad3
-
-bison:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 8):
-	bison -d zad3.y
 
 # Not a target:
-.SUFFIXES:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+makefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+
+# Not a target:
+GNUmakefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
 
 # files hash-table stats:
-# Load=7/1024=1%, Rehash=0, Collisions=0/23=0%
+# Load=6/1024=1%, Rehash=0, Collisions=0/15=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 21 / storage = 165 B / avg = 7 B
-# current buf: size = 8162 B / used = 165 B / count = 21 / avg = 7 B
+# strcache buffers: 1 (0) / strings = 16 / storage = 126 B / avg = 7 B
+# current buf: size = 8162 B / used = 126 B / count = 16 / avg = 7 B
 
-# strcache performance: lookups = 33 / hit rate = 36%
+# strcache performance: lookups = 19 / hit rate = 15%
 # hash-table stats:
-# Load=21/8192=0%, Rehash=0, Collisions=0/33=0%
-# Finished Make data base on Sun Nov 28 12:38:35 2021
+ 
+# Load=16/8192=0%, Rehash=0, Collisions=0/19=0%
+# Finished Make data base on Sat Jan  8 18:15:07 2022
 
  

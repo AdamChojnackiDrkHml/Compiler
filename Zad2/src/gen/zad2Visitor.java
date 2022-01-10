@@ -10,11 +10,11 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface zad2Visitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link zad2Parser#start}.
+	 * Visit a parse tree produced by {@link zad2Parser#dupa}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStart(zad2Parser.StartContext ctx);
+	T visitDupa(zad2Parser.DupaContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Nothing}
 	 * labeled alternative in {@link zad2Parser#line}.
@@ -50,12 +50,12 @@ public interface zad2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNumer(zad2Parser.NumerContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code MulDivMod}
+	 * Visit a parse tree produced by the {@code MulDiv}
 	 * labeled alternative in {@link zad2Parser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMulDivMod(zad2Parser.MulDivModContext ctx);
+	T visitMulDiv(zad2Parser.MulDivContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code AddSub}
 	 * labeled alternative in {@link zad2Parser#expression}.
@@ -77,4 +77,32 @@ public interface zad2Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParentheses(zad2Parser.ParenthesesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code APwrMulDiv}
+	 * labeled alternative in {@link zad2Parser#afterpwr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAPwrMulDiv(zad2Parser.APwrMulDivContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code APwrNumer}
+	 * labeled alternative in {@link zad2Parser#afterpwr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAPwrNumer(zad2Parser.APwrNumerContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code APwrAddSub}
+	 * labeled alternative in {@link zad2Parser#afterpwr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAPwrAddSub(zad2Parser.APwrAddSubContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code APwrParentheses}
+	 * labeled alternative in {@link zad2Parser#afterpwr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAPwrParentheses(zad2Parser.APwrParenthesesContext ctx);
 }

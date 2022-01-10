@@ -75,13 +75,13 @@
 #include"utils.h"
 
 extern int yylineno;
-
+int N = 1234577;
 int err = 0;
 char* default_err = "invalid syntax";
 char* err_msg = "invalid syntax";
 int yylex();
 void yyerror(const char *s);
-
+int resHolder = 0;
 
 #line 87 "zad3.tab.c"
 
@@ -119,16 +119,16 @@ enum yysymbol_kind_t
   YYSYMBOL_PLUS = 5,                       /* PLUS  */
   YYSYMBOL_MINUS = 6,                      /* MINUS  */
   YYSYMBOL_MULT = 7,                       /* MULT  */
-  YYSYMBOL_MOD = 8,                        /* MOD  */
-  YYSYMBOL_DIV = 9,                        /* DIV  */
-  YYSYMBOL_LBRACKET = 10,                  /* LBRACKET  */
-  YYSYMBOL_RBRACKET = 11,                  /* RBRACKET  */
-  YYSYMBOL_PWR = 12,                       /* PWR  */
-  YYSYMBOL_NEG = 13,                       /* NEG  */
-  YYSYMBOL_YYACCEPT = 14,                  /* $accept  */
-  YYSYMBOL_input = 15,                     /* input  */
-  YYSYMBOL_line = 16,                      /* line  */
-  YYSYMBOL_expr = 17                       /* expr  */
+  YYSYMBOL_DIV = 8,                        /* DIV  */
+  YYSYMBOL_LBRACKET = 9,                   /* LBRACKET  */
+  YYSYMBOL_RBRACKET = 10,                  /* RBRACKET  */
+  YYSYMBOL_PWR = 11,                       /* PWR  */
+  YYSYMBOL_NEG = 12,                       /* NEG  */
+  YYSYMBOL_YYACCEPT = 13,                  /* $accept  */
+  YYSYMBOL_input = 14,                     /* input  */
+  YYSYMBOL_line = 15,                      /* line  */
+  YYSYMBOL_expr = 16,                      /* expr  */
+  YYSYMBOL_afterpwr = 17                   /* afterpwr  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -456,19 +456,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   41
+#define YYLAST   55
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  14
+#define YYNTOKENS  13
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  4
+#define YYNNTS  5
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  15
+#define YYNRULES  21
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  27
+#define YYNSTATES  39
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   268
+#define YYMAXUTOK   267
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -508,7 +508,7 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13
+       5,     6,     7,     8,     9,    10,    11,    12
 };
 
 #if YYDEBUG
@@ -516,7 +516,8 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int8 yyrline[] =
 {
        0,    28,    28,    29,    33,    34,    41,    45,    46,    47,
-      48,    49,    58,    67,    68,    77
+      48,    49,    58,    59,    68,    73,    74,    75,    76,    77,
+      86,    88
 };
 #endif
 
@@ -533,8 +534,8 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "NUM", "NEWLINE",
-  "PLUS", "MINUS", "MULT", "MOD", "DIV", "LBRACKET", "RBRACKET", "PWR",
-  "NEG", "$accept", "input", "line", "expr", YY_NULLPTR
+  "PLUS", "MINUS", "MULT", "DIV", "LBRACKET", "RBRACKET", "PWR", "NEG",
+  "$accept", "input", "line", "expr", "afterpwr", YY_NULLPTR
 };
 
 static const char *
@@ -558,9 +559,10 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -7,    14,    -7,     1,    -7,    -7,    13,    13,    -7,    21,
-      -7,    -7,    29,    -7,    13,    13,    13,    13,    13,    13,
-      -7,    -5,    -5,     9,     9,     9,     9
+      -7,    12,    -7,     0,    -7,    -7,    11,    11,    -7,    27,
+      -7,    -7,    34,    -7,    11,    11,    11,    11,    40,    -7,
+      -5,    -5,    -4,    -4,    -7,    40,    40,    -7,    -7,    45,
+      40,    40,    40,    40,    -7,    17,    17,    -7,    -7
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -569,20 +571,21 @@ static const yytype_int8 yypact[] =
 static const yytype_int8 yydefact[] =
 {
        2,     0,     1,     0,     7,     4,     0,     0,     3,     0,
-       6,    13,     0,     5,     0,     0,     0,     0,     0,     0,
-      15,     8,     9,    10,    12,    11,    14
+       6,    12,     0,     5,     0,     0,     0,     0,     0,    14,
+       8,     9,    10,    11,    15,     0,     0,    13,    20,     0,
+       0,     0,     0,     0,    21,    16,    17,    18,    19
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -7,    -7,    -7,    -6
+      -7,    -7,    -7,    -6,    -3
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1,     8,     9
+       0,     1,     8,     9,    27
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -590,43 +593,48 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      11,    12,    16,    17,    18,    10,     0,    19,    21,    22,
-      23,    24,    25,    26,     2,     3,     4,     4,     5,     6,
-       6,    19,     0,     7,     7,    13,    14,    15,    16,    17,
-      18,     0,     0,    19,    14,    15,    16,    17,    18,     0,
-      20,    19
+      11,    12,    16,    17,    10,     0,    18,    18,    20,    21,
+      22,    23,     2,     3,     4,     4,     5,     6,     6,     0,
+       7,     7,    28,    29,    32,    33,     0,    35,    36,    37,
+      38,    13,    14,    15,    16,    17,     0,     0,    18,    14,
+      15,    16,    17,    24,    19,    18,    25,     0,     0,    26,
+      30,    31,    32,    33,     0,    34
 };
 
 static const yytype_int8 yycheck[] =
 {
-       6,     7,     7,     8,     9,     4,    -1,    12,    14,    15,
-      16,    17,    18,    19,     0,     1,     3,     3,     4,     6,
-       6,    12,    -1,    10,    10,     4,     5,     6,     7,     8,
-       9,    -1,    -1,    12,     5,     6,     7,     8,     9,    -1,
-      11,    12
+       6,     7,     7,     8,     4,    -1,    11,    11,    14,    15,
+      16,    17,     0,     1,     3,     3,     4,     6,     6,    -1,
+       9,     9,    25,    26,     7,     8,    -1,    30,    31,    32,
+      33,     4,     5,     6,     7,     8,    -1,    -1,    11,     5,
+       6,     7,     8,     3,    10,    11,     6,    -1,    -1,     9,
+       5,     6,     7,     8,    -1,    10
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    15,     0,     1,     3,     4,     6,    10,    16,    17,
-       4,    17,    17,     4,     5,     6,     7,     8,     9,    12,
-      11,    17,    17,    17,    17,    17,    17
+       0,    14,     0,     1,     3,     4,     6,     9,    15,    16,
+       4,    16,    16,     4,     5,     6,     7,     8,    11,    10,
+      16,    16,    16,    16,     3,     6,     9,    17,    17,    17,
+       5,     6,     7,     8,    10,    17,    17,    17,    17
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    14,    15,    15,    16,    16,    16,    17,    17,    17,
-      17,    17,    17,    17,    17,    17
+       0,    13,    14,    14,    15,    15,    15,    16,    16,    16,
+      16,    16,    16,    16,    16,    17,    17,    17,    17,    17,
+      17,    17
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     0,     2,     1,     2,     2,     1,     3,     3,
-       3,     3,     3,     2,     3,     3
+       3,     3,     2,     3,     3,     1,     3,     3,     3,     3,
+       2,     3
 };
 
 
@@ -1098,89 +1106,125 @@ yyreduce:
                             printf("\n");
                         }
                     }
-#line 1102 "zad3.tab.c"
+#line 1110 "zad3.tab.c"
     break;
 
   case 7: /* expr: NUM  */
 #line 45 "zad3.y"
-                                { yyval = converge(yyvsp[0]); printf(" %d ", yyvsp[0]);}
-#line 1108 "zad3.tab.c"
+                                { yyval = converge(yyvsp[0], N); printf(" %d ", yyvsp[0]);}
+#line 1116 "zad3.tab.c"
     break;
 
   case 8: /* expr: expr PLUS expr  */
 #line 46 "zad3.y"
-                                { yyval = add(converge(yyvsp[-2]), converge(yyvsp[0])); printf(" + ");}
-#line 1114 "zad3.tab.c"
+                                { yyval = add(converge(yyvsp[-2], N), converge(yyvsp[0], N), N); printf(" + ");}
+#line 1122 "zad3.tab.c"
     break;
 
   case 9: /* expr: expr MINUS expr  */
 #line 47 "zad3.y"
-                                { yyval = substract(converge(yyvsp[-2]), converge(yyvsp[0])); printf(" - "); }
-#line 1120 "zad3.tab.c"
+                                { yyval = substract(converge(yyvsp[-2], N), converge(yyvsp[0], N), N); printf(" - "); }
+#line 1128 "zad3.tab.c"
     break;
 
   case 10: /* expr: expr MULT expr  */
 #line 48 "zad3.y"
-                                { yyval = multiply(converge(yyvsp[-2]), converge(yyvsp[0])); printf(" * ");}
-#line 1126 "zad3.tab.c"
+                                { yyval = multiply(converge(yyvsp[-2], N), converge(yyvsp[0], N), N); printf(" * ");}
+#line 1134 "zad3.tab.c"
     break;
 
   case 11: /* expr: expr DIV expr  */
 #line 49 "zad3.y"
                                 { 
-                                    if(yyvsp[0] == 0) {
-                                        err_msg = "dividing by 0 is not allowed";
+                                    if((resHolder = divide(converge(yyvsp[-2], N), converge(yyvsp[0], N), N)) == -1) {
+                                        err_msg = "dividing is not allowed";
                                         yyerror("");
                                     } else {
-                                        yyval = divide(converge(yyvsp[-2]), converge(yyvsp[0]));
+                                        yyval = resHolder;
                                     }
-                                     printf(" / ");
+                                    printf(" / ");
                                 }
-#line 1140 "zad3.tab.c"
+#line 1148 "zad3.tab.c"
     break;
 
-  case 12: /* expr: expr MOD expr  */
+  case 12: /* expr: MINUS expr  */
 #line 58 "zad3.y"
-                                {
-                                    if(converge(yyvsp[0]) == 0) {
-                                        err_msg = "dividing by 0 is not allowed";
-                                        yyerror("");
-                                    } else {
-                                        yyval = modulo(converge(yyvsp[-2]), converge(yyvsp[0]));
-                                    }
-                                     printf(" % ");
-                                }
+                                { yyval = neg(yyvsp[0], N);  printf(" - ");}
 #line 1154 "zad3.tab.c"
     break;
 
-  case 13: /* expr: MINUS expr  */
-#line 67 "zad3.y"
-                                { yyval = neg(converge(yyvsp[0]));  printf(" - ");}
-#line 1160 "zad3.tab.c"
-    break;
-
-  case 14: /* expr: expr PWR expr  */
-#line 68 "zad3.y"
-                                {
-                                    if(converge(yyvsp[0]) < 0) {
+  case 13: /* expr: expr PWR afterpwr  */
+#line 59 "zad3.y"
+                                    {
+                                    if(converge(yyvsp[0], N) < 0) {
                                         err_msg = "negative exponent is not allowed";
                                         yyerror("");
                                     } else {
-                                        yyval = power(converge(yyvsp[-2]), converge(yyvsp[0]));
+                                        yyval = power(converge(yyvsp[-2], N), converge(yyvsp[0], N), N);
                                     }
                                      printf(" ^ ");
                                 }
+#line 1168 "zad3.tab.c"
+    break;
+
+  case 14: /* expr: LBRACKET expr RBRACKET  */
+#line 68 "zad3.y"
+                               { yyval = yyvsp[-1]; }
 #line 1174 "zad3.tab.c"
     break;
 
-  case 15: /* expr: LBRACKET expr RBRACKET  */
-#line 77 "zad3.y"
-                               { yyval = yyvsp[-1]; }
+  case 15: /* afterpwr: NUM  */
+#line 73 "zad3.y"
+                                { yyval = converge(yyvsp[0], N-1); printf(" %d ", yyvsp[0]);}
 #line 1180 "zad3.tab.c"
     break;
 
+  case 16: /* afterpwr: afterpwr PLUS afterpwr  */
+#line 74 "zad3.y"
+                                        { yyval = add(converge(yyvsp[-2], N-1), converge(yyvsp[0], N-1), N); printf(" + ");}
+#line 1186 "zad3.tab.c"
+    break;
 
-#line 1184 "zad3.tab.c"
+  case 17: /* afterpwr: afterpwr MINUS afterpwr  */
+#line 75 "zad3.y"
+                                        { yyval = substract(converge(yyvsp[-2], N-1), converge(yyvsp[0], N-1), N-1); printf(" - "); }
+#line 1192 "zad3.tab.c"
+    break;
+
+  case 18: /* afterpwr: afterpwr MULT afterpwr  */
+#line 76 "zad3.y"
+                                        { yyval = multiply(converge(yyvsp[-2], N-1), converge(yyvsp[0], N-1), N-1); printf(" * ");}
+#line 1198 "zad3.tab.c"
+    break;
+
+  case 19: /* afterpwr: afterpwr DIV afterpwr  */
+#line 77 "zad3.y"
+                                { 
+                                    if((resHolder = divide(converge(yyvsp[-2], N-1), converge(yyvsp[0], N-1), N-1)) == -1) {
+                                        err_msg = "dividing is not allowed";
+                                        yyerror("");
+                                    } else {
+                                        yyval = resHolder;
+                                    }
+                                    printf(" / ");
+                                }
+#line 1212 "zad3.tab.c"
+    break;
+
+  case 20: /* afterpwr: MINUS afterpwr  */
+#line 86 "zad3.y"
+                                    { yyval = neg(yyvsp[0], N-1);  printf(" - ");}
+#line 1218 "zad3.tab.c"
+    break;
+
+  case 21: /* afterpwr: LBRACKET afterpwr RBRACKET  */
+#line 88 "zad3.y"
+                                   { yyval = yyvsp[-1]; }
+#line 1224 "zad3.tab.c"
+    break;
+
+
+#line 1228 "zad3.tab.c"
 
       default: break;
     }
@@ -1373,7 +1417,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 79 "zad3.y"
+#line 91 "zad3.y"
 
 
 void yyerror(const char *s) {
