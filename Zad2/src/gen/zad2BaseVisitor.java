@@ -16,7 +16,7 @@ public class zad2BaseVisitor<T> extends AbstractParseTreeVisitor<T> implements z
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDupa(zad2Parser.DupaContext ctx) { return visitChildren(ctx); }
+	@Override public T visitStart(zad2Parser.StartContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

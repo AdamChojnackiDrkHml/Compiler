@@ -19,10 +19,11 @@ public class zad2Parser extends Parser {
 		COMMENT=1, ENDLINE=2, BACKSLASH=3, WHITESPACE=4, CHARACTERS=5, LBRACKET=6, 
 		RBRACKET=7, PWR=8, MUL=9, DIV=10, MOD=11, ADD=12, SUB=13, NUMBER=14;
 	public static final int
-		RULE_dupa = 0, RULE_line = 1, RULE_comment = 2, RULE_expression = 3, RULE_afterpwr = 4;
+		RULE_start = 0, RULE_line = 1, RULE_comment = 2, RULE_expression = 3, 
+		RULE_afterpwr = 4;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"dupa", "line", "comment", "expression", "afterpwr"
+			"start", "line", "comment", "expression", "afterpwr"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -91,44 +92,44 @@ public class zad2Parser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
-	public static class DupaContext extends ParserRuleContext {
+	public static class StartContext extends ParserRuleContext {
 		public TerminalNode EOF() { return getToken(zad2Parser.EOF, 0); }
-		public DupaContext dupa() {
-			return getRuleContext(DupaContext.class,0);
+		public StartContext start() {
+			return getRuleContext(StartContext.class,0);
 		}
 		public LineContext line() {
 			return getRuleContext(LineContext.class,0);
 		}
-		public DupaContext(ParserRuleContext parent, int invokingState) {
+		public StartContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_dupa; }
+		@Override public int getRuleIndex() { return RULE_start; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof zad2Listener ) ((zad2Listener)listener).enterDupa(this);
+			if ( listener instanceof zad2Listener ) ((zad2Listener)listener).enterStart(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof zad2Listener ) ((zad2Listener)listener).exitDupa(this);
+			if ( listener instanceof zad2Listener ) ((zad2Listener)listener).exitStart(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof zad2Visitor ) return ((zad2Visitor<? extends T>)visitor).visitDupa(this);
+			if ( visitor instanceof zad2Visitor ) return ((zad2Visitor<? extends T>)visitor).visitStart(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final DupaContext dupa() throws RecognitionException {
-		return dupa(0);
+	public final StartContext start() throws RecognitionException {
+		return start(0);
 	}
 
-	private DupaContext dupa(int _p) throws RecognitionException {
+	private StartContext start(int _p) throws RecognitionException {
 		ParserRuleContext _parentctx = _ctx;
 		int _parentState = getState();
-		DupaContext _localctx = new DupaContext(_ctx, _parentState);
-		DupaContext _prevctx = _localctx;
+		StartContext _localctx = new StartContext(_ctx, _parentState);
+		StartContext _prevctx = _localctx;
 		int _startState = 0;
-		enterRecursionRule(_localctx, 0, RULE_dupa, _p);
+		enterRecursionRule(_localctx, 0, RULE_start, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -155,8 +156,8 @@ public class zad2Parser extends Parser {
 					_prevctx = _localctx;
 					{
 					{
-					_localctx = new DupaContext(_parentctx, _parentState);
-					pushNewRecursionContext(_localctx, _startState, RULE_dupa);
+					_localctx = new StartContext(_parentctx, _parentState);
+					pushNewRecursionContext(_localctx, _startState, RULE_start);
 					setState(14);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 					setState(15);
@@ -931,7 +932,7 @@ public class zad2Parser extends Parser {
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
 		case 0:
-			return dupa_sempred((DupaContext)_localctx, predIndex);
+			return start_sempred((StartContext)_localctx, predIndex);
 		case 3:
 			return expression_sempred((ExpressionContext)_localctx, predIndex);
 		case 4:
@@ -939,7 +940,7 @@ public class zad2Parser extends Parser {
 		}
 		return true;
 	}
-	private boolean dupa_sempred(DupaContext _localctx, int predIndex) {
+	private boolean start_sempred(StartContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0:
 			return precpred(_ctx, 2);

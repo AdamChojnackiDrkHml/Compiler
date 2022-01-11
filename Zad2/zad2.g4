@@ -23,8 +23,8 @@ NUMBER: [0-9]+;
 
 
 // Rules
-dupa
-   : dupa line
+start
+   : start line
    | EOF?;
 
 line

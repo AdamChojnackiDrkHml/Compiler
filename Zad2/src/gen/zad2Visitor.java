@@ -10,11 +10,11 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface zad2Visitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link zad2Parser#dupa}.
+	 * Visit a parse tree produced by {@link zad2Parser#start}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDupa(zad2Parser.DupaContext ctx);
+	T visitStart(zad2Parser.StartContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Nothing}
 	 * labeled alternative in {@link zad2Parser#line}.

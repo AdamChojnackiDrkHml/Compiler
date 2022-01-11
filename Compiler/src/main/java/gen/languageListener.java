@@ -7,6 +7,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface languageListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link languageParser#start}.
+	 * @param ctx the parse tree
+	 */
+	void enterStart(languageParser.StartContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link languageParser#start}.
+	 * @param ctx the parse tree
+	 */
+	void exitStart(languageParser.StartContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code Declare_Start}
 	 * labeled alternative in {@link languageParser#program}.
 	 * @param ctx the parse tree

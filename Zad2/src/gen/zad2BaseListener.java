@@ -15,13 +15,13 @@ public class zad2BaseListener implements zad2Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDupa(zad2Parser.DupaContext ctx) { }
+	@Override public void enterStart(zad2Parser.StartContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDupa(zad2Parser.DupaContext ctx) { }
+	@Override public void exitStart(zad2Parser.StartContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

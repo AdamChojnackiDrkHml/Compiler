@@ -44,6 +44,9 @@ PIDENTIFIER: [_a-z]+;
 CHARACTER: [a-zA-Z]+;
 
 //Rules
+start
+  : program;
+
 program
   : possibleWhitespace VAR WHITESPACE declarations WHITESPACE BEGIN WHITESPACE commands END EOF? #Declare_Start
   | possibleWhitespace BEGIN WHITESPACE commands END EOF? #Nodeclare_Start;

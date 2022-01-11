@@ -25,4 +25,20 @@ class CodeGeneratorTest {
         System.out.println(cg.sb.toString());
 
     }
+
+    @Test
+    void div() {
+    }
+
+    @Test
+    void mod() {
+        CodeGenerator cg = new CodeGenerator();
+        Variable var1 = new Variable(1);
+        Variable var2 = new Variable(2);
+
+        var1.setValue(-12);
+        var2.setValue(5);
+        cg.mod(var1, var2);
+        System.out.println(cg.sb.toString());
+    }
 }

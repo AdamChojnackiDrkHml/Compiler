@@ -9,17 +9,23 @@ import java.util.List;
 public class LanguageVisitor extends languageBaseVisitor<Variable>
 {
     DataHandler dataHandler = new DataHandler();
+    CodeGenerator cg = new CodeGenerator();
     String lastPID = "";
     @Override public Variable visitDeclare_Start(languageParser.Declare_StartContext ctx)
     {
         this.visit(ctx.declarations());
         this.visit(ctx.commands());
+        cg.writeEnd();
+        System.out.println(cg.sb.toString());
+
         return null;
     }
 
     @Override public Variable visitNodeclare_Start(languageParser.Nodeclare_StartContext ctx)
     {
         this.visit(ctx.commands());
+        cg.writeEnd();
+        System.out.println(cg.sb.toString());
         return null;
     }
 
@@ -64,7 +70,11 @@ public class LanguageVisitor extends languageBaseVisitor<Variable>
     @Override public Variable visitAssign_Statement(languageParser.Assign_StatementContext ctx)
     {
         dataHandler.initVariable(lastPID);
-        return visitChildren(ctx);
+
+        Variable ex = this.visit(ctx.identifier());
+        this.visit(ctx.expression());
+        cg.assign(ex);
+        return ex;
     }
 
     @Override
@@ -96,13 +106,15 @@ public class LanguageVisitor extends languageBaseVisitor<Variable>
     @Override
     public Variable visitRead_Statement(languageParser.Read_StatementContext ctx)
     {
-        return visitChildren(ctx);
+        cg.read(this.visit(ctx.identifier()));
+        return null;
     }
 
     @Override
     public Variable visitWrite_Statement(languageParser.Write_StatementContext ctx)
     {
-        return visitChildren(ctx);
+        cg.write(this.visit(ctx.value()));
+        return null;
     }
 
     @Override
@@ -120,13 +132,21 @@ public class LanguageVisitor extends languageBaseVisitor<Variable>
     @Override
     public Variable visitEval_Value(languageParser.Eval_ValueContext ctx)
     {
+        cg.getConstant(this.visit(ctx.value()));
         return visitChildren(ctx.value());
     }
 
     @Override
     public Variable visitCalculate_Value(languageParser.Calculate_ValueContext ctx)
     {
-        //TODO
+        switch(ctx.operator.getText())
+        {
+            case "PLUS": cg.add(this.visit(ctx.left), this.visit(ctx.right)); break;
+            case "MINUS": cg.sub(this.visit(ctx.left), this.visit(ctx.right)); break;
+            case "MUL": cg.mul(this.visit(ctx.left), this.visit(ctx.right)); break;
+            case "DIV": cg.div(this.visit(ctx.left), this.visit(ctx.right)); break;
+            case "MOD": cg.mod(this.visit(ctx.left), this.visit(ctx.right)); break;
+        }
         return visitChildren(ctx);
     }
 

@@ -7,15 +7,15 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface zad2Listener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link zad2Parser#dupa}.
+	 * Enter a parse tree produced by {@link zad2Parser#start}.
 	 * @param ctx the parse tree
 	 */
-	void enterDupa(zad2Parser.DupaContext ctx);
+	void enterStart(zad2Parser.StartContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link zad2Parser#dupa}.
+	 * Exit a parse tree produced by {@link zad2Parser#start}.
 	 * @param ctx the parse tree
 	 */
-	void exitDupa(zad2Parser.DupaContext ctx);
+	void exitStart(zad2Parser.StartContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Nothing}
 	 * labeled alternative in {@link zad2Parser#line}.

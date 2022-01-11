@@ -10,6 +10,12 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface languageVisitor<T> extends ParseTreeVisitor<T> {
 	/**
+	 * Visit a parse tree produced by {@link languageParser#start}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStart(languageParser.StartContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Declare_Start}
 	 * labeled alternative in {@link languageParser#program}.
 	 * @param ctx the parse tree
