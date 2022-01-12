@@ -6,31 +6,35 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.List;
 
-public class LanguageVisitor extends languageBaseVisitor<Variable>
+public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
 {
     DataHandler dataHandler = new DataHandler();
     CodeGenerator cg = new CodeGenerator();
     String lastPID = "";
-    @Override public Variable visitDeclare_Start(languageParser.Declare_StartContext ctx)
+    @Override public VisitorDataTransmiter visitDeclare_Start(languageParser.Declare_StartContext ctx)
     {
         this.visit(ctx.declarations());
-        this.visit(ctx.commands());
+        VisitorDataTransmiter var = this.visit(ctx.commands());
+        cg.wholeCodeBuilder.addAll(var.codeHandler);
         cg.writeEnd();
-        System.out.println(cg.sb.toString());
-
-        return null;
+        //System.out.println(String.join("", cg.wholeCodeBuilder));
+        VisitorDataTransmiter ret = new VisitorDataTransmiter();
+        ret.codeHandler = cg.wholeCodeBuilder;
+        return ret;
     }
 
-    @Override public Variable visitNodeclare_Start(languageParser.Nodeclare_StartContext ctx)
+    @Override public VisitorDataTransmiter visitNodeclare_Start(languageParser.Nodeclare_StartContext ctx)
     {
-        this.visit(ctx.commands());
+        VisitorDataTransmiter var = this.visit(ctx.commands());
+        cg.wholeCodeBuilder.addAll(var.codeHandler);
         cg.writeEnd();
-        System.out.println(cg.sb.toString());
-        return null;
+        VisitorDataTransmiter ret = new VisitorDataTransmiter();
+        ret.codeHandler = cg.wholeCodeBuilder;
+        return ret;
     }
 
     @Override
-    public Variable visitPut_Table1(languageParser.Put_Table1Context ctx)
+    public VisitorDataTransmiter visitPut_Table1(languageParser.Put_Table1Context ctx)
     {
         dataHandler.setLocation(ctx.PIDENTIFIER().getSymbol().getLine(), ctx.PIDENTIFIER().getSymbol().getCharPositionInLine());
         dataHandler.addArray(ctx.PIDENTIFIER().getText(), Integer.parseInt(ctx.left.getText()), Integer.parseInt(ctx.right.getText()));
@@ -39,7 +43,7 @@ public class LanguageVisitor extends languageBaseVisitor<Variable>
     }
 
     @Override
-    public Variable visitPut_Symbol1(languageParser.Put_Symbol1Context ctx)
+    public VisitorDataTransmiter visitPut_Symbol1(languageParser.Put_Symbol1Context ctx)
     {
         dataHandler.setLocation(ctx.PIDENTIFIER().getSymbol().getLine(), ctx.PIDENTIFIER().getSymbol().getCharPositionInLine());
         dataHandler.addSymbol(ctx.PIDENTIFIER().getText());
@@ -48,55 +52,79 @@ public class LanguageVisitor extends languageBaseVisitor<Variable>
     }
 
     @Override
-    public Variable visitPut_Table2(languageParser.Put_Table2Context ctx)
+    public VisitorDataTransmiter visitPut_Table2(languageParser.Put_Table2Context ctx)
     {
         dataHandler.setLocation(ctx.PIDENTIFIER().getSymbol().getLine(), ctx.PIDENTIFIER().getSymbol().getCharPositionInLine());
         dataHandler.addArray(ctx.PIDENTIFIER().getText(), Integer.parseInt(ctx.left.getText()), Integer.parseInt(ctx.right.getText()));
         return null;
     }
 
-    @Override public Variable visitPut_Symbol2(languageParser.Put_Symbol2Context ctx)
+    @Override public VisitorDataTransmiter visitPut_Symbol2(languageParser.Put_Symbol2Context ctx)
     {
         dataHandler.setLocation(ctx.PIDENTIFIER().getSymbol().getLine(), ctx.PIDENTIFIER().getSymbol().getCharPositionInLine());
         dataHandler.addSymbol(ctx.PIDENTIFIER().getText());
         return null;
     }
 
-    @Override public Variable visitCommands(languageParser.CommandsContext ctx)
+    @Override
+    public VisitorDataTransmiter visitGetCommands(languageParser.GetCommandsContext ctx)
     {
-        return visitChildren(ctx);
+        VisitorDataTransmiter ret = new VisitorDataTransmiter();
+        VisitorDataTransmiter vRec = this.visit(ctx.commands());
+        VisitorDataTransmiter vTer = this.visit(ctx.command());
+        ret.offset += vRec.offset;
+        ret.offset += vTer.offset;
+        ret.codeHandler.addAll(vRec.codeHandler);
+        ret.codeHandler.addAll(vTer.codeHandler);
+
+        return ret;
     }
 
-    @Override public Variable visitAssign_Statement(languageParser.Assign_StatementContext ctx)
+    @Override
+    public VisitorDataTransmiter visitGetCommand(languageParser.GetCommandContext ctx)
     {
+        return this.visit(ctx.command());
+    }
+
+    @Override public VisitorDataTransmiter visitAssign_Statement(languageParser.Assign_StatementContext ctx)
+    {
+
+        VisitorDataTransmiter ex = this.visit(ctx.identifier());
         dataHandler.initVariable(lastPID);
-
-        Variable ex = this.visit(ctx.identifier());
-        this.visit(ctx.expression());
-        cg.assign(ex);
-        return ex;
+        VisitorDataTransmiter v2 = this.visit(ctx.expression());
+        ex.offset += v2.offset;
+        ex.codeHandler.addAll(v2.codeHandler);
+        ex.offset += cg.assign(ex.variable, ex.codeHandler);
+        return (ex);
     }
 
     @Override
-    public Variable visitIf_Statement(languageParser.If_StatementContext ctx)
+    public VisitorDataTransmiter visitIf_Statement(languageParser.If_StatementContext ctx)
+    {
+
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public VisitorDataTransmiter visitIfElse_Statement(languageParser.IfElse_StatementContext ctx)
     {
         return visitChildren(ctx);
     }
 
     @Override
-    public Variable visitWhile_Statement(languageParser.While_StatementContext ctx)
+    public VisitorDataTransmiter visitWhile_Statement(languageParser.While_StatementContext ctx)
     {
         return visitChildren(ctx);
     }
 
     @Override
-    public Variable visitRepeat_Statement(languageParser.Repeat_StatementContext ctx)
+    public VisitorDataTransmiter visitRepeat_Statement(languageParser.Repeat_StatementContext ctx)
     {
         return visitChildren(ctx);
     }
 
     @Override
-    public Variable visitFor_Statement(languageParser.For_StatementContext ctx)
+    public VisitorDataTransmiter visitFor_Statement(languageParser.For_StatementContext ctx)
     {
         dataHandler.addIterator(ctx.PIDENTIFIER().getText());
 
@@ -104,67 +132,68 @@ public class LanguageVisitor extends languageBaseVisitor<Variable>
     }
 
     @Override
-    public Variable visitRead_Statement(languageParser.Read_StatementContext ctx)
+    public VisitorDataTransmiter visitRead_Statement(languageParser.Read_StatementContext ctx)
     {
-        cg.read(this.visit(ctx.identifier()));
-        return null;
+        VisitorDataTransmiter var = this.visit(ctx.identifier());
+        dataHandler.initVariable(lastPID);
+        var.offset += cg.read(var.variable, var.codeHandler);
+        return var;
     }
 
     @Override
-    public Variable visitWrite_Statement(languageParser.Write_StatementContext ctx)
+    public VisitorDataTransmiter visitWrite_Statement(languageParser.Write_StatementContext ctx)
     {
-        cg.write(this.visit(ctx.value()));
-        return null;
+        VisitorDataTransmiter var = this.visit(ctx.value());
+        var.offset += cg.write(var.variable, var.codeHandler);
+        return var;
+    }
+
+
+
+
+    @Override
+    public VisitorDataTransmiter visitEval_Value(languageParser.Eval_ValueContext ctx)
+    {
+        VisitorDataTransmiter var1 = this.visit(ctx.value());
+        VisitorDataTransmiter ret = new VisitorDataTransmiter();
+        ret.codeHandler.addAll(var1.codeHandler);
+        ret.offset += cg.getConstant(this.visit(ctx.value()).variable, ret.codeHandler);
+        return ret;
     }
 
     @Override
-    public Variable visitElse_Statement(languageParser.Else_StatementContext ctx)
+    public VisitorDataTransmiter visitCalculate_Value(languageParser.Calculate_ValueContext ctx)
     {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public Variable visitIF_StatementEnd(languageParser.IF_StatementEndContext ctx)
-    {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public Variable visitEval_Value(languageParser.Eval_ValueContext ctx)
-    {
-        cg.getConstant(this.visit(ctx.value()));
-        return visitChildren(ctx.value());
-    }
-
-    @Override
-    public Variable visitCalculate_Value(languageParser.Calculate_ValueContext ctx)
-    {
-        switch(ctx.operator.getText())
-        {
-            case "PLUS": cg.add(this.visit(ctx.left), this.visit(ctx.right)); break;
-            case "MINUS": cg.sub(this.visit(ctx.left), this.visit(ctx.right)); break;
-            case "MUL": cg.mul(this.visit(ctx.left), this.visit(ctx.right)); break;
-            case "DIV": cg.div(this.visit(ctx.left), this.visit(ctx.right)); break;
-            case "MOD": cg.mod(this.visit(ctx.left), this.visit(ctx.right)); break;
+        VisitorDataTransmiter var1 = this.visit(ctx.left);
+        VisitorDataTransmiter var2 = this.visit(ctx.right);
+        VisitorDataTransmiter ret = new VisitorDataTransmiter();
+        ret.codeHandler.addAll(var1.codeHandler);
+        ret.codeHandler.addAll(var2.codeHandler);
+        switch (ctx.operator.getText()) {
+            case "PLUS" -> ret.offset += cg.add(var1.variable ,var2.variable, ret.codeHandler);
+            case "MINUS" -> ret.offset += cg.sub(var1.variable ,var2.variable, ret.codeHandler);
+            case "TIMES" -> ret.offset += cg.mul(var1.variable ,var2.variable, ret.codeHandler);
+            case "DIV" -> ret.offset += cg.div(var1.variable ,var2.variable, ret.codeHandler);
+            case "MOD" -> ret.offset += cg.mod(var1.variable ,var2.variable, ret.codeHandler);
         }
-        return visitChildren(ctx);
+        return ret;
     }
 
     @Override
-    public Variable visitCalculate_Bool(languageParser.Calculate_BoolContext ctx)
+    public VisitorDataTransmiter visitCalculate_Bool(languageParser.Calculate_BoolContext ctx)
     {
         //TODO
         return visitChildren(ctx);
     }
 
     @Override
-    public Variable visitGet_Number(languageParser.Get_NumberContext ctx)
+    public VisitorDataTransmiter visitGet_Number(languageParser.Get_NumberContext ctx)
     {
-        return dataHandler.getValue(Integer.parseInt(ctx.NUM().getText()));
+        return new VisitorDataTransmiter(dataHandler.getValue(Integer.parseInt(ctx.NUM().getText())));
     }
 
     @Override
-    public Variable visitGet_Identifier(languageParser.Get_IdentifierContext ctx)
+    public VisitorDataTransmiter visitGet_Identifier(languageParser.Get_IdentifierContext ctx)
     {
         this.visit(ctx.identifier());
         if(dataHandler.checkVariable(lastPID))
@@ -176,28 +205,28 @@ public class LanguageVisitor extends languageBaseVisitor<Variable>
     }
 
     @Override
-    public Variable visitGet_PIDENTIFIER(languageParser.Get_PIDENTIFIERContext ctx)
+    public VisitorDataTransmiter visitGet_PIDENTIFIER(languageParser.Get_PIDENTIFIERContext ctx)
     {
         dataHandler.setLocation(ctx.PIDENTIFIER().getSymbol().getLine(), ctx.PIDENTIFIER().getSymbol().getCharPositionInLine());
         lastPID = ctx.PIDENTIFIER().getText();
-        return dataHandler.getVariable(ctx.PIDENTIFIER().getText());
+        return new VisitorDataTransmiter(dataHandler.getVariable(ctx.PIDENTIFIER().getText()));
     }
 
     @Override
-    public Variable visitGet_ArrayMemberByPID(languageParser.Get_ArrayMemberByPIDContext ctx)
+    public VisitorDataTransmiter visitGet_ArrayMemberByPID(languageParser.Get_ArrayMemberByPIDContext ctx)
     {
         List<TerminalNode> pidList = ctx.PIDENTIFIER();
         dataHandler.setLocation(pidList.get(0).getSymbol().getLine(), pidList.get(0).getSymbol().getCharPositionInLine());
         lastPID = pidList.get(1).getText();
-        return dataHandler.getArrValVar(pidList.get(0).getText(), pidList.get(1).getText());
+        return new VisitorDataTransmiter(dataHandler.getArrValVar(pidList.get(0).getText(), pidList.get(1).getText()));
     }
 
     @Override
-    public Variable visitGet_ArrayMemberByVal(languageParser.Get_ArrayMemberByValContext ctx)
+    public VisitorDataTransmiter visitGet_ArrayMemberByVal(languageParser.Get_ArrayMemberByValContext ctx)
     {
         dataHandler.setLocation(ctx.PIDENTIFIER().getSymbol().getLine(), ctx.PIDENTIFIER().getSymbol().getCharPositionInLine());
         lastPID = ctx.PIDENTIFIER().getText();
-        return dataHandler.getArrValVar(ctx.PIDENTIFIER().getText(), ctx.NUM().getText());
+        return new VisitorDataTransmiter(dataHandler.getArrValNum(ctx.PIDENTIFIER().getText(), Integer.parseInt(ctx.NUM().getText())));
     }
 
 }

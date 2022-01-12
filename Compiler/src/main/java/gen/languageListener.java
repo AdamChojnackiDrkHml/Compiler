@@ -89,15 +89,29 @@ public interface languageListener extends ParseTreeListener {
 	 */
 	void exitPut_Symbol2(languageParser.Put_Symbol2Context ctx);
 	/**
-	 * Enter a parse tree produced by {@link languageParser#commands}.
+	 * Enter a parse tree produced by the {@code GetCommand}
+	 * labeled alternative in {@link languageParser#commands}.
 	 * @param ctx the parse tree
 	 */
-	void enterCommands(languageParser.CommandsContext ctx);
+	void enterGetCommand(languageParser.GetCommandContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link languageParser#commands}.
+	 * Exit a parse tree produced by the {@code GetCommand}
+	 * labeled alternative in {@link languageParser#commands}.
 	 * @param ctx the parse tree
 	 */
-	void exitCommands(languageParser.CommandsContext ctx);
+	void exitGetCommand(languageParser.GetCommandContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code GetCommands}
+	 * labeled alternative in {@link languageParser#commands}.
+	 * @param ctx the parse tree
+	 */
+	void enterGetCommands(languageParser.GetCommandsContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code GetCommands}
+	 * labeled alternative in {@link languageParser#commands}.
+	 * @param ctx the parse tree
+	 */
+	void exitGetCommands(languageParser.GetCommandsContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Assign_Statement}
 	 * labeled alternative in {@link languageParser#command}.
@@ -122,6 +136,18 @@ public interface languageListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIf_Statement(languageParser.If_StatementContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code IfElse_Statement}
+	 * labeled alternative in {@link languageParser#command}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfElse_Statement(languageParser.IfElse_StatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IfElse_Statement}
+	 * labeled alternative in {@link languageParser#command}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfElse_Statement(languageParser.IfElse_StatementContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code While_Statement}
 	 * labeled alternative in {@link languageParser#command}.
@@ -182,30 +208,6 @@ public interface languageListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitWrite_Statement(languageParser.Write_StatementContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code Else_Statement}
-	 * labeled alternative in {@link languageParser#conditional}.
-	 * @param ctx the parse tree
-	 */
-	void enterElse_Statement(languageParser.Else_StatementContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code Else_Statement}
-	 * labeled alternative in {@link languageParser#conditional}.
-	 * @param ctx the parse tree
-	 */
-	void exitElse_Statement(languageParser.Else_StatementContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code IF_StatementEnd}
-	 * labeled alternative in {@link languageParser#conditional}.
-	 * @param ctx the parse tree
-	 */
-	void enterIF_StatementEnd(languageParser.IF_StatementEndContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code IF_StatementEnd}
-	 * labeled alternative in {@link languageParser#conditional}.
-	 * @param ctx the parse tree
-	 */
-	void exitIF_StatementEnd(languageParser.IF_StatementEndContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Eval_Value}
 	 * labeled alternative in {@link languageParser#expression}.

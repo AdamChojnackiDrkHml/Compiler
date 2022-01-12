@@ -4,14 +4,16 @@ public class Variable
 {
     private final long address;
     private final long arrayAddress;
+    long arrayOffset;
     private long value;
     private boolean isSet;
+    Symbol symbol;
 
     public Variable(long address)
     {
         this.address = address;
         arrayAddress = -1;
-        isSet = false;
+        isSet = true;
     }
 
     public Variable(long address, long arrayAddress)

@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 public class Compilationation {
 
-    public Variable calculate(String input) {
+    public VisitorDataTransmiter calculate(String input) {
 
         languageLexer lexer = new languageLexer(CharStreams.fromString(input));
         TokenStream tokens = new CommonTokenStream(lexer);

@@ -48,8 +48,8 @@ start
   : program;
 
 program
-  : possibleWhitespace VAR WHITESPACE declarations WHITESPACE BEGIN WHITESPACE commands END EOF? #Declare_Start
-  | possibleWhitespace BEGIN WHITESPACE commands END EOF? #Nodeclare_Start;
+  : possibleWhitespace VAR WHITESPACE declarations WHITESPACE BEGIN WHITESPACE commands possibleWhitespace END EOF? #Declare_Start
+  | possibleWhitespace BEGIN WHITESPACE commands END possibleWhitespace EOF? #Nodeclare_Start;
 
 declarations
  : possibleWhitespace PIDENTIFIER LSQBRACKET left=NUM ':' right=NUM RSQBRACKET COMMA WHITESPACE declarations #Put_Table1
@@ -58,21 +58,19 @@ declarations
  | possibleWhitespace PIDENTIFIER #Put_Symbol2;
 
 commands
- : commands command WHITESPACE
- | command WHITESPACE;
+ : commands command WHITESPACE #GetCommands
+ | command WHITESPACE #GetCommand;
 
 command
  : possibleWhitespace identifier WHITESPACE ASSIGN WHITESPACE expression SEMICOLON #Assign_Statement
- | possibleWhitespace IF WHITESPACE condition WHITESPACE THEN WHITESPACE commands conditional #If_Statement
+ | possibleWhitespace IF WHITESPACE condition WHITESPACE THEN WHITESPACE commands possibleWhitespace ENDIF #If_Statement
+ | possibleWhitespace IF WHITESPACE condition WHITESPACE THEN WHITESPACE commands ELSE WHITESPACE commands ENDIF  #IfElse_Statement
  | possibleWhitespace WHILE WHITESPACE condition WHITESPACE DO WHITESPACE commands ENDWHILE #While_Statement
  | possibleWhitespace REPEAT WHITESPACE commands UNTIL WHITESPACE condition SEMICOLON #Repeat_Statement
  | possibleWhitespace FOR WHITESPACE PIDENTIFIER WHITESPACE FROM WHITESPACE v1=value WHITESPACE (TO|DOWNTO) WHITESPACE v2=value WHITESPACE DO WHITESPACE commands ENDFOR #For_Statement
  | possibleWhitespace READ WHITESPACE identifier SEMICOLON #Read_Statement
  | possibleWhitespace WRITE WHITESPACE value SEMICOLON #Write_Statement;
 
-conditional
-    : possibleWhitespace ELSE WHITESPACE commands ENDIF #Else_Statement
-    | possibleWhitespace ENDIF #IF_StatementEnd;
 
 expression
  : possibleWhitespace value #Eval_Value

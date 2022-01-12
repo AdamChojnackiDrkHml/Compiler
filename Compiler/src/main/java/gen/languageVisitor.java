@@ -58,11 +58,19 @@ public interface languageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPut_Symbol2(languageParser.Put_Symbol2Context ctx);
 	/**
-	 * Visit a parse tree produced by {@link languageParser#commands}.
+	 * Visit a parse tree produced by the {@code GetCommand}
+	 * labeled alternative in {@link languageParser#commands}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCommands(languageParser.CommandsContext ctx);
+	T visitGetCommand(languageParser.GetCommandContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code GetCommands}
+	 * labeled alternative in {@link languageParser#commands}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGetCommands(languageParser.GetCommandsContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Assign_Statement}
 	 * labeled alternative in {@link languageParser#command}.
@@ -77,6 +85,13 @@ public interface languageVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIf_Statement(languageParser.If_StatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code IfElse_Statement}
+	 * labeled alternative in {@link languageParser#command}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfElse_Statement(languageParser.IfElse_StatementContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code While_Statement}
 	 * labeled alternative in {@link languageParser#command}.
@@ -112,20 +127,6 @@ public interface languageVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitWrite_Statement(languageParser.Write_StatementContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code Else_Statement}
-	 * labeled alternative in {@link languageParser#conditional}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElse_Statement(languageParser.Else_StatementContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code IF_StatementEnd}
-	 * labeled alternative in {@link languageParser#conditional}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIF_StatementEnd(languageParser.IF_StatementEndContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Eval_Value}
 	 * labeled alternative in {@link languageParser#expression}.

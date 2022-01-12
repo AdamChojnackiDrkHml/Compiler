@@ -1,23 +1,27 @@
 package comp;
 
+import java.util.ArrayList;
+
 public class CondLabel
 {
-    private final long startPointer;
-    private final long goToPointer;
+    ArrayList<String> condPreAmbule = new ArrayList<>();
+    ArrayList<String> condPostAmbule = new ArrayList<>();
+//    private final long startPointer;
+//    private final long goToPointer;
 
-    public CondLabel(long start, long goTo)
+    public CondLabel()
     {
-        startPointer = start;
-        goToPointer = goTo;
+//        startPointer = start;
+//        goToPointer = goTo;
     }
 
-    public long getStartPointer()
-    {
-        return startPointer;
-    }
-
-    public long getGoToPointer()
-    {
-        return goToPointer;
-    }
+//    public long getStartPointer()
+//    {
+//        return startPointer;
+//    }
+//
+//    public long getGoToPointer()
+//    {
+//        return goToPointer;
+//    }
 }

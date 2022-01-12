@@ -123,8 +123,9 @@ public class DataHandler
             errorCounter++;
             return null;
         }
-
-        return new Variable(sym.getOffset() + pos - sym.getArrayBeginIdx() + 1);
+        Variable ret = new Variable(sym.getOffset() + pos - sym.getArrayBeginIdx() + 1);
+        ret.arrayOffset = sym.getArrayBeginIdx();
+        return ret;
     }
 
     public Variable getArrValVar(String name, String pos_name)
@@ -160,14 +161,14 @@ public class DataHandler
     private long allocMemorySingle()
     {
         memoryEndPointer++;
-        return memoryEndPointer;
+        return memoryEndPointer-1;
     }
 
     private long allocMemoryArr(long size)
     {
         long beginPointer = memoryEndPointer;
         memoryEndPointer+=size;
-        return beginPointer + 1;
+        return beginPointer;
     }
 
     private void freeMemSingle()
@@ -205,20 +206,12 @@ public class DataHandler
             return false;
         }
 
-        if(sym.isArray())
-        {
-            System.out.println(errorTextColor + " " + name + " cant use whole array as a variable" + currLine + ":" + currColumn + ".");
-            errorFound = true;
-            errorCounter++;
-            return false;
-        }
-
         return true;
     }
 
     public CondLabel createLabel(long start, long end)
     {
-        return new CondLabel(start, end);
+        return new CondLabel();
     }
 
     public ForLabel createForLabel(String iteratorName, Variable start, Variable end, boolean downto)

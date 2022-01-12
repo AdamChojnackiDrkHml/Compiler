@@ -7,10 +7,10 @@ class CodeGeneratorTest {
     void test_genConst() {
         CodeGenerator cg = new CodeGenerator();
 
-        cg.genConst(100, Registers.B);
+        cg.genConst(100, Registers.B, cg.wholeCodeBuilder);
 
-        assert !cg.sb.toString().equals(" ");
-        System.out.println(cg.sb.toString());
+        assert !cg.wholeCodeBuilder.toString().equals(" ");
+        System.out.println(cg.wholeCodeBuilder.toString());
     }
 
     @Test
@@ -21,8 +21,8 @@ class CodeGeneratorTest {
 
         var1.setValue(3);
         var2.setValue(5);
-        cg.mul(var1, var2);
-        System.out.println(cg.sb.toString());
+        cg.mul(var1, var2, cg.wholeCodeBuilder);
+        System.out.println(cg.wholeCodeBuilder.toString());
 
     }
 
@@ -38,7 +38,7 @@ class CodeGeneratorTest {
 
         var1.setValue(-12);
         var2.setValue(5);
-        cg.mod(var1, var2);
-        System.out.println(cg.sb.toString());
+        cg.mod(var1, var2, cg.wholeCodeBuilder);
+        System.out.println(cg.wholeCodeBuilder.toString());
     }
 }

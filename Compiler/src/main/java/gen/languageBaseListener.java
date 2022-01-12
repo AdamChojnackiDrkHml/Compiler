@@ -99,13 +99,25 @@ public class languageBaseListener implements languageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCommands(languageParser.CommandsContext ctx) { }
+	@Override public void enterGetCommand(languageParser.GetCommandContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCommands(languageParser.CommandsContext ctx) { }
+	@Override public void exitGetCommand(languageParser.GetCommandContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGetCommands(languageParser.GetCommandsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGetCommands(languageParser.GetCommandsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -130,6 +142,18 @@ public class languageBaseListener implements languageListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIf_Statement(languageParser.If_StatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIfElse_Statement(languageParser.IfElse_StatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIfElse_Statement(languageParser.IfElse_StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -190,30 +214,6 @@ public class languageBaseListener implements languageListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitWrite_Statement(languageParser.Write_StatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterElse_Statement(languageParser.Else_StatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitElse_Statement(languageParser.Else_StatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterIF_StatementEnd(languageParser.IF_StatementEndContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIF_StatementEnd(languageParser.IF_StatementEndContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
