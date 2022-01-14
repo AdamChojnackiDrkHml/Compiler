@@ -20,7 +20,7 @@ public class Variable
     {
         this.address = address;
         this.arrayAddress = arrayAddress;
-        isSet = false;
+        isSet = true;
     }
 
     public Variable(long address, long arrayAddress, long value)
@@ -28,6 +28,7 @@ public class Variable
         this.address = address;
         this.arrayAddress = arrayAddress;
         this.value = value;
+        isSet = false;
     }
 
     public long getArrayAddress()

@@ -41,7 +41,7 @@ public class Symbol
         isArray = true;
         isIterator = false;
 
-        size = arrayEndIdx - arrayBeginIdx + 2;
+        size = arrayEndIdx - arrayBeginIdx + 1;
         this.arrayBeginIdx = arrayBeginIdx;
         this.arrayEndIdx = arrayEndIdx;
     }

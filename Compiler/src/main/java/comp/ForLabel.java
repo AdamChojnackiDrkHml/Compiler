@@ -2,18 +2,15 @@ package comp;
 
 public class ForLabel
 {
-    private final Variable iterator;
-    private final Variable start;
-    private final Variable end;
-    private CondLabel condLabel;
-    private final Variable skip;
+    private Variable iterator;
+    private Variable start;
+    private Variable end;
 
-    ForLabel(Variable iterator, Variable start, Variable end, Variable skip)
+    ForLabel(Variable iterator, Variable start, Variable end)
     {
         this.iterator = iterator;
         this.start = start;
         this.end = end;
-        this.skip = skip;
     }
 
     public Variable getIterator()
@@ -31,18 +28,20 @@ public class ForLabel
         return end;
     }
 
-    public Variable getSkip()
+
+    public void setIterator(Variable it)
     {
-        return skip;
+        iterator = it;
     }
 
-    public CondLabel getCondLabel()
+    public void setStart(Variable st)
     {
-        return condLabel;
+        start = st;
     }
 
-    public void setCondLabel(CondLabel condLabel)
+    public void setEnd(Variable end)
     {
-        this.condLabel = condLabel;
+        this.end = end;
     }
+
 }

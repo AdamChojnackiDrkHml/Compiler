@@ -64,10 +64,10 @@ commands
 command
  : possibleWhitespace identifier WHITESPACE ASSIGN WHITESPACE expression SEMICOLON #Assign_Statement
  | possibleWhitespace IF WHITESPACE condition WHITESPACE THEN WHITESPACE commands possibleWhitespace ENDIF #If_Statement
- | possibleWhitespace IF WHITESPACE condition WHITESPACE THEN WHITESPACE commands ELSE WHITESPACE commands ENDIF  #IfElse_Statement
+ | possibleWhitespace IF WHITESPACE condition WHITESPACE THEN WHITESPACE ifblock=commands ELSE WHITESPACE elseblock=commands ENDIF  #IfElse_Statement
  | possibleWhitespace WHILE WHITESPACE condition WHITESPACE DO WHITESPACE commands ENDWHILE #While_Statement
  | possibleWhitespace REPEAT WHITESPACE commands UNTIL WHITESPACE condition SEMICOLON #Repeat_Statement
- | possibleWhitespace FOR WHITESPACE PIDENTIFIER WHITESPACE FROM WHITESPACE v1=value WHITESPACE (TO|DOWNTO) WHITESPACE v2=value WHITESPACE DO WHITESPACE commands ENDFOR #For_Statement
+ | possibleWhitespace FOR WHITESPACE PIDENTIFIER WHITESPACE FROM WHITESPACE v1=value WHITESPACE direction=(TO|DOWNTO) WHITESPACE v2=value WHITESPACE DO WHITESPACE commands ENDFOR #For_Statement
  | possibleWhitespace READ WHITESPACE identifier SEMICOLON #Read_Statement
  | possibleWhitespace WRITE WHITESPACE value SEMICOLON #Write_Statement;
 
@@ -77,7 +77,7 @@ expression
  | possibleWhitespace left=value WHITESPACE operator=(PLUS|MINUS|TIMES|DIV|MOD) WHITESPACE right=value #Calculate_Value;
 
 condition
- : possibleWhitespace value WHITESPACE (EQ|NEQ|LE|GE|LEQ|GEQ) WHITESPACE value #Calculate_Bool;
+ : possibleWhitespace left=value WHITESPACE oparator=(EQ|NEQ|LE|GE|LEQ|GEQ) WHITESPACE right=value #Calculate_Bool;
 
 value
  : possibleWhitespace NUM #Get_Number

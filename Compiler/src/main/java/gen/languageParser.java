@@ -1,16 +1,12 @@
 package gen;// Generated from /home/adam/Uczelnia/JFTT/L3/Compiler/src/main/language.g4 by ANTLR 4.9.2
-
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNDeserializer;
-import org.antlr.v4.runtime.atn.ParserATNSimulator;
-import org.antlr.v4.runtime.atn.PredictionContextCache;
+import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.antlr.v4.runtime.tree.ParseTreeVisitor;
-import org.antlr.v4.runtime.tree.TerminalNode;
-
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.*;
+import org.antlr.v4.runtime.tree.*;
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class languageParser extends Parser {
@@ -653,6 +649,8 @@ public class languageParser extends Parser {
 		}
 	}
 	public static class IfElse_StatementContext extends CommandContext {
+		public CommandsContext ifblock;
+		public CommandsContext elseblock;
 		public PossibleWhitespaceContext possibleWhitespace() {
 			return getRuleContext(PossibleWhitespaceContext.class,0);
 		}
@@ -665,14 +663,14 @@ public class languageParser extends Parser {
 			return getRuleContext(ConditionContext.class,0);
 		}
 		public TerminalNode THEN() { return getToken(languageParser.THEN, 0); }
+		public TerminalNode ELSE() { return getToken(languageParser.ELSE, 0); }
+		public TerminalNode ENDIF() { return getToken(languageParser.ENDIF, 0); }
 		public List<CommandsContext> commands() {
 			return getRuleContexts(CommandsContext.class);
 		}
 		public CommandsContext commands(int i) {
 			return getRuleContext(CommandsContext.class,i);
 		}
-		public TerminalNode ELSE() { return getToken(languageParser.ELSE, 0); }
-		public TerminalNode ENDIF() { return getToken(languageParser.ENDIF, 0); }
 		public IfElse_StatementContext(CommandContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -722,6 +720,7 @@ public class languageParser extends Parser {
 	}
 	public static class For_StatementContext extends CommandContext {
 		public ValueContext v1;
+		public Token direction;
 		public ValueContext v2;
 		public PossibleWhitespaceContext possibleWhitespace() {
 			return getRuleContext(PossibleWhitespaceContext.class,0);
@@ -983,13 +982,13 @@ public class languageParser extends Parser {
 				setState(114);
 				match(WHITESPACE);
 				setState(115);
-				commands(0);
+				((IfElse_StatementContext)_localctx).ifblock = commands(0);
 				setState(116);
 				match(ELSE);
 				setState(117);
 				match(WHITESPACE);
 				setState(118);
-				commands(0);
+				((IfElse_StatementContext)_localctx).elseblock = commands(0);
 				setState(119);
 				match(ENDIF);
 				}
@@ -1063,9 +1062,10 @@ public class languageParser extends Parser {
 				setState(148);
 				match(WHITESPACE);
 				setState(149);
+				((For_StatementContext)_localctx).direction = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==DOWNTO || _la==TO) ) {
-				_errHandler.recoverInline(this);
+					((For_StatementContext)_localctx).direction = (Token)_errHandler.recoverInline(this);
 				}
 				else {
 					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
@@ -1274,18 +1274,21 @@ public class languageParser extends Parser {
 		}
 	}
 	public static class Calculate_BoolContext extends ConditionContext {
+		public ValueContext left;
+		public Token oparator;
+		public ValueContext right;
 		public PossibleWhitespaceContext possibleWhitespace() {
 			return getRuleContext(PossibleWhitespaceContext.class,0);
+		}
+		public List<TerminalNode> WHITESPACE() { return getTokens(languageParser.WHITESPACE); }
+		public TerminalNode WHITESPACE(int i) {
+			return getToken(languageParser.WHITESPACE, i);
 		}
 		public List<ValueContext> value() {
 			return getRuleContexts(ValueContext.class);
 		}
 		public ValueContext value(int i) {
 			return getRuleContext(ValueContext.class,i);
-		}
-		public List<TerminalNode> WHITESPACE() { return getTokens(languageParser.WHITESPACE); }
-		public TerminalNode WHITESPACE(int i) {
-			return getToken(languageParser.WHITESPACE, i);
 		}
 		public TerminalNode EQ() { return getToken(languageParser.EQ, 0); }
 		public TerminalNode NEQ() { return getToken(languageParser.NEQ, 0); }
@@ -1320,13 +1323,14 @@ public class languageParser extends Parser {
 			setState(184);
 			possibleWhitespace();
 			setState(185);
-			value();
+			((Calculate_BoolContext)_localctx).left = value();
 			setState(186);
 			match(WHITESPACE);
 			setState(187);
+			((Calculate_BoolContext)_localctx).oparator = _input.LT(1);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << EQ) | (1L << NEQ) | (1L << LE) | (1L << GE) | (1L << LEQ) | (1L << GEQ))) != 0)) ) {
-			_errHandler.recoverInline(this);
+				((Calculate_BoolContext)_localctx).oparator = (Token)_errHandler.recoverInline(this);
 			}
 			else {
 				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
@@ -1336,7 +1340,7 @@ public class languageParser extends Parser {
 			setState(188);
 			match(WHITESPACE);
 			setState(189);
-			value();
+			((Calculate_BoolContext)_localctx).right = value();
 			}
 		}
 		catch (RecognitionException re) {

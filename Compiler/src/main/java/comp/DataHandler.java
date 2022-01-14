@@ -14,6 +14,7 @@ public class DataHandler
     private long currLine, currColumn;
     private long errorCounter = 0;
     private boolean errorFound = false;
+    private long forSymbolsIterator = 0;
     public boolean checkIfSymbolExists(String name)
     {
         return DataSymbolMap.get(name) != null;
@@ -52,7 +53,7 @@ public class DataHandler
             return -1;
         }
 
-        long offset = allocMemoryArr(end - begin + 2);
+        long offset = allocMemoryArr(end - begin + 1);
         DataSymbolMap.put(name, new Symbol(name, offset, begin, end));
         return offset;
     }
@@ -76,6 +77,15 @@ public class DataHandler
         return offset;
     }
 
+    public String addIteratorSymbol()
+    {
+        String name = "!" + forSymbolsIterator;
+        forSymbolsIterator++;
+
+        addSymbol(name);
+
+        return name;
+    }
     public long addValue(long value)
     {
         String name = (String.valueOf(value));
@@ -123,7 +133,7 @@ public class DataHandler
             errorCounter++;
             return null;
         }
-        Variable ret = new Variable(sym.getOffset() + pos - sym.getArrayBeginIdx() + 1);
+        Variable ret = new Variable(sym.getOffset() + pos - sym.getArrayBeginIdx());
         ret.arrayOffset = sym.getArrayBeginIdx();
         return ret;
     }
@@ -148,7 +158,9 @@ public class DataHandler
             return null;
         }
 
-        return new Variable(sym.getOffset(), pos.getOffset());
+        Variable ret = new Variable(sym.getOffset(), pos.getOffset());
+        ret.arrayOffset = sym.getArrayBeginIdx();
+        return ret;
     }
 
 
@@ -209,14 +221,9 @@ public class DataHandler
         return true;
     }
 
-    public CondLabel createLabel(long start, long end)
+    public ForLabel createForLabel(String iteratorName, Variable start, Variable end)
     {
-        return new CondLabel();
-    }
-
-    public ForLabel createForLabel(String iteratorName, Variable start, Variable end, boolean downto)
-    {
-        return new ForLabel(getVariable(iteratorName),start, end, getValue(downto ? -1 : 1));
+        return new ForLabel(getVariable(iteratorName),start, end);
     }
 
 }

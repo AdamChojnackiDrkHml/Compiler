@@ -2,27 +2,27 @@ package comp;
 
 public enum Registers
 {
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
-    H;
+    a,
+    b,
+    c,
+    d,
+    e,
+    f,
+    g,
+    h;
 
     public Registers fromString(String s)
     {
-        switch(s) {
-            case "A": return A;
-            case "B": return B;
-            case "C": return C;
-            case "D": return D;
-            case "E": return E;
-            case "F": return F;
-            case "G": return G;
-            case "H": return H;
-        }
-        return A;
+        return switch (s) {
+            case "A" -> a;
+            case "B" -> b;
+            case "C" -> c;
+            case "D" -> d;
+            case "E" -> e;
+            case "F" -> f;
+            case "G" -> g;
+            case "H" -> h;
+            default -> a;
+        };
     }
 }

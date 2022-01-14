@@ -5,14 +5,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import static comp.Registers.A;
-import static comp.Registers.B;
+import static comp.CommandsEnum.*;
+import static comp.Registers.*;
 
 public class CodeGenerator
 {
     ArrayList<String> wholeCodeBuilder = new ArrayList<>();
-    DataHandler dh;
+    public DataHandler dh;
 
+    public CodeGenerator(DataHandler d)
+    {
+        this.dh = d;
+    }
 
     void writeEnd() {
         wholeCodeBuilder.add("HALT\n");
@@ -25,17 +29,13 @@ public class CodeGenerator
         }
     }
 
-    void addSingle(String op)
-    {
-        wholeCodeBuilder.add(op);
-    }
 
     /**
      * Writes wanted constant to given register.
      * Use registers A and B
      * ALL PREV DATA WILL BE LOST
      */
-    public long genConst(long con, Registers reg, ArrayList<String> sb)
+    public long genConst(long con, Registers reg, ArrayList<String> sb) //JEST GIT
     {
         long offset = 0;
         sb.add("RESET a\n");
@@ -65,44 +65,41 @@ public class CodeGenerator
 
     }
 
+    Variable copyVariable(Variable var, ArrayList<String> sb)
+    {
+        String temp_name = dh.addIteratorSymbol();
+        Variable temp_var = dh.getVariable(temp_name);
+
+        getVarVal(var, a, sb);
+        saveRegToMem(temp_var, a, sb);
+
+        return temp_var;
+    }
+
     /**
      * Saves value from register to mem.
      */
-    long saveRegToMem(Variable var, Registers r, ArrayList<String> sb)
+    long saveRegToMem(Variable var, Registers r, ArrayList<String> sb) //POPRAWIĆ
     {
         long offset = 0;
-        boolean isArr = var.getArrayAddress() != -1;
         switch (r) {
-            case A -> {
-                sb.add("(START SAVING)\n");
+            case a -> {
                 sb.add("SWAP c\n");
-                offset += getMemAddrInRegA(var, sb, isArr);
-                //sb.add("PUT\n");
-                if(var.getArrayAddress() != -1)
-                {
-                    sb.add("SWAP d\n");
-                    offset += genConst(var.getArrayAddress()-var., A, sb);
-                    sb.add("(POSITION ADDRES GENERATED)\n");
-                    sb.add("LOAD a\n");
-                    //sb.add("PUT\n");
-                    sb.add("ADD d\n");
-                    sb.add("PUT\n");
-                }
+                offset += getMemAddrInRegA(var, sb);
                 sb.add("SWAP c\n");
-                //sb.add("PUT");
                 sb.add("STORE c\n");
                 offset += 3;
             }
-            case B -> {
+            case b -> {
                 sb.add("SWAP c\n");
                 sb.add("SWAP c\n");
-                offset += getMemAddrInRegA(var, sb, isArr);
+                offset += getMemAddrInRegA(var, sb);
                 sb.add("SWAP c\n");
                 sb.add("STORE c\n");
                 offset += 4;
             }
             default -> {
-                offset += getMemAddrInRegA(var, sb, isArr);
+                offset += getMemAddrInRegA(var, sb);
                 sb.add("SWAP " + r.toString().toLowerCase(Locale.ROOT) +"\n");
                 sb.add("STORE " + r.toString().toLowerCase(Locale.ROOT) + "\n");
                 offset += 2;
@@ -112,20 +109,10 @@ public class CodeGenerator
         return offset;
     }
 
-    long getMemFromReg(Variable var, Registers r, ArrayList<String> sb, boolean isArr)
+    long getMemFromReg(Variable var, Registers r, ArrayList<String> sb)  //DO POPRAWY
     {
         long offset = 0;
-        offset += getMemAddrInRegA(var, sb, false);
-        if(isArr)
-        {
-            sb.add("PUT\n");
-            sb.add("SWAP d\n");
-            offset += genConst(var.getArrayAddress(), A, sb);
-            sb.add("PUT\n");
-            sb.add("ADD d");
-            offset++;
-
-        }
+        offset += getMemAddrInRegA(var, sb);
         sb.add("LOAD a\n");
         sb.add("SWAP " + r.toString().toLowerCase(Locale.ROOT) + "\n");
         offset += 2;
@@ -141,11 +128,11 @@ public class CodeGenerator
         }
         else if(var.getArrayAddress() != -1)
         {
-            offset += getMemFromReg(var, r, sb, true);
+            offset += getMemFromReg(var, r, sb);
         }
         else
         {
-            offset += getMemFromReg(var, r, sb, false);
+            offset += getMemFromReg(var, r, sb);
         }
         return offset;
     }
@@ -153,23 +140,30 @@ public class CodeGenerator
     long getVarValInAB(Variable var1, Variable var2, ArrayList<String> sb)
     {
         long offset = 0;
-        offset += getVarVal(var1, A, sb);
+        offset += getVarVal(var1, a, sb);
         sb.add("SWAP c\n");
-        offset += getVarVal(var2, B, sb);
+        offset += getVarVal(var2, b, sb);
         sb.add("SWAP c\n");
         offset += 2;
         return offset;
     }
 
-    long getMemAddrInRegA(Variable var, ArrayList<String> sb, boolean isArr)
+    long getMemAddrInRegA(Variable var, ArrayList<String> sb) //DO POPRAWKI
     {
-        long addr = var.getAddress();
-        //sb.add("START GENERATING ADDR IN REG A\n");
-        return genConst(addr, A, sb);
-    }
+        long offset = genConst(var.getAddress(), a, sb);
 
-    void arrayOffset(long addres, long offset)
-    {
+        if(var.getArrayAddress() != -1)
+        {
+            sb.add(SWAP + " " + d + "\n");
+            offset += genConst(var.getArrayAddress(), a, sb);
+            sb.add(LOAD + " " + a + "\n");
+            sb.add(ADD + " " + d + "\n");
+            sb.add(SWAP + " " + d + "\n");
+            offset += genConst(-var.arrayOffset, a, sb);
+            sb.add(ADD + " " + d + "\n");
+            offset += 5;
+        }
+        return  offset;
     }
 
     //
@@ -178,10 +172,9 @@ public class CodeGenerator
     long read(Variable var, ArrayList<String> sb)
     {
         long offset = 0;
-        //sb.add("(START READ)\n");
         sb.add("GET\n");
         offset += 1;
-        offset += saveRegToMem(var, A, sb);
+        offset += saveRegToMem(var, a, sb);
 
         var.setSet(true);
         return offset;
@@ -190,8 +183,7 @@ public class CodeGenerator
     long write(Variable var, ArrayList<String> sb)
     {
         long offset = 0;
-        //sb.add("(START WRITE)\n");
-        offset += getVarVal(var, A, sb);
+        offset += getVarVal(var, a, sb);
         sb.add("PUT\n");
         offset++;
         return offset;
@@ -202,9 +194,7 @@ public class CodeGenerator
     //
     long assign(Variable var, ArrayList<String> sb)
     {
-        long offset = 0;
-        //sb.add("(START ASSIGN)\n");
-        return saveRegToMem(var, A, sb);
+        return saveRegToMem(var, a, sb);
     }
 
 
@@ -214,7 +204,7 @@ public class CodeGenerator
 
     long getConstant(Variable var, ArrayList<String> sb)
     {
-        return getVarVal(var, A, sb);
+        return getVarVal(var, a, sb);
     }
 
     long add(Variable var1, Variable var2, ArrayList<String> sb)
@@ -295,7 +285,7 @@ public class CodeGenerator
         sb.add("JUMP 1\n");
         sb.add("SWAP b\n");
 
-        offset += 36;
+        offset += 38;
         return offset;
     }
 
@@ -408,27 +398,157 @@ public class CodeGenerator
     //COMPARATIVES
     //
 
-    CondLabel eqBeg(Variable var1, Variable var2)
+    long eq(Variable var1, Variable var2, ArrayList<String> sb)
     {
-        CondLabel cL = new CondLabel();
-
-        getVarValInAB(var1, var2, cL.condPreAmbule);
-        cL.condPreAmbule.add("SUB B\n");
-        cL.condPreAmbule.add("JZERO 2\n"); //FIX JUMP if TRUE
-        //sb.append("JUMP indef\n"); //FIX JUMP IF FALSE
-
-        return cL;
+        long offset = 0;
+        offset += getVarValInAB(var1, var2, sb);
+        sb.add("SUB b\n");
+        sb.add("JZERO 2\n");
+        offset += 2;
+        return offset;
     }
 
 
+    public long neq(Variable var1, Variable var2, ArrayList<String> sb)
+    {
+        long offset = 0;
+        offset += getVarValInAB(var1, var2, sb);
+        sb.add("SUB b\n");
+        sb.add("JPOS 3\n");
+        sb.add("JNEG 2\n");
+        offset += 3;
+        return offset;
+    }
 
+    long leq(Variable var1, Variable var2, ArrayList<String> sb)
+    {
+        long offset = 0;
+        offset += getVarValInAB(var1, var2, sb);
+        sb.add("SUB b\n");
+        sb.add("JNEG 3\n");
+        sb.add("JZERO 2\n");
+        offset += 3;
+        return offset;
+    }
 
+    long geq(Variable var1, Variable var2, ArrayList<String> sb)
+    {
+        long offset = 0;
+        offset += getVarValInAB(var1, var2, sb);
+        sb.add("SUB b\n");
+        sb.add("JPOS 3\n");
+        sb.add("JZERO 2\n");
+        offset += 3;
+        return offset;
+    }
+
+    long le(Variable var1, Variable var2, ArrayList<String> sb)
+    {
+        long offset = 0;
+        offset += getVarValInAB(var1, var2, sb);
+        sb.add("SUB b\n");
+        sb.add("JNEG 2\n");
+        offset += 2;
+        return offset;
+    }
+
+    long ge(Variable var1, Variable var2, ArrayList<String> sb)
+    {
+        long offset = 0;
+        offset += getVarValInAB(var1, var2, sb);
+        sb.add("SUB b\n");
+        sb.add("JPOS 2\n");
+        offset += 2;
+        return offset;
+    }
     //
     //IFs
     //
 
-    void if_block(long go_to, StringBuilder sb)
+    long if_block(long offset, ArrayList<String> sb)
     {
-
+        sb.add(JUMP + " " + (offset+1) + "\n");
+        return 1;
     }
+
+    void if_else_block_first(long offset, ArrayList<String> sb)
+    {
+        sb.add(JUMP + " " + (offset+2) + "\n");
+    }
+
+
+    void if_else_block_second(long offset, ArrayList<String> sb)
+    {
+        sb.add(JUMP + " " + (offset+1) + "\n");
+    }
+
+
+    //
+    //LOOPs
+    //
+
+    void while_block_first(long offset, ArrayList<String> sb)
+    {
+        sb.add(JUMP + " " + (offset+2) + "\n");
+    }
+
+    void while_block_second(long offsetCommands, long offsetCond, ArrayList<String> sb)
+    {
+        sb.add(JUMP + " " + -(offsetCommands + offsetCond + 1) + "\n");
+    }
+
+    void repeat_block(long offsetCommands, long offsetCond, ArrayList<String> sb)
+    {
+        sb.add(JUMP + " " + -(offsetCommands+offsetCond) + "\n");
+    }
+
+    void for_block_init(ForLabel label, ArrayList<String> sb)
+    {
+//        sb.add("(START INIT)\n");
+        label.setStart(copyVariable(label.getStart(), sb));
+        label.setEnd(copyVariable(label.getEnd(), sb));
+
+        getConstant(label.getStart(), sb);
+        assign(label.getIterator(), sb);
+//        sb.add("(END INIT)\n");
+    }
+
+    void for_to_block_first(ForLabel label, ArrayList<String> sb)
+    {
+        sb.add("(START COND)\n");
+        leq(label.getIterator(), label.getEnd(), sb);
+    }
+
+    void for_downto_block_first(ForLabel label, ArrayList<String> sb)
+    {
+        sb.add("(START COND)\n");
+        geq(label.getIterator(), label.getEnd(), sb);
+    }
+
+    void for_to_block_second(ForLabel label, ArrayList<String> sb, long offsetCond)
+    {
+//        sb.add("(START AFTER)\n");
+        getVarVal(label.getIterator(), a, sb);
+        sb.add("INC a\n");
+        saveRegToMem(label.getIterator(), a, sb);
+        sb.add("JUMP " + -(offsetCond + sb.size()) + "\n");
+//        sb.add("(END AFTER)\n");
+    }
+
+    void for_downto_block_second(ForLabel label, ArrayList<String> sb, long offsetCond)
+    {
+//        sb.add("(START AFTER)\n");
+        getVarVal(label.getIterator(), a, sb);
+        sb.add("DEC a\n");
+        saveRegToMem(label.getIterator(), a, sb);
+        sb.add("JUMP " + -(offsetCond + sb.size()) + "\n");
+//        sb.add("(END AFTER)\n");
+    }
+
+    void for_block_addJump(long offsetCommands, ArrayList<String> sb)
+    {
+        sb.add("JUMP " + (offsetCommands+1) + "\n");
+        sb.add("(END COND)\n");
+    }
+
 }

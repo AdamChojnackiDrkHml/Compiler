@@ -5,9 +5,9 @@ class CodeGeneratorTest {
 
     @Test
     void test_genConst() {
-        CodeGenerator cg = new CodeGenerator();
+        CodeGenerator cg = new CodeGenerator(new DataHandler());
 
-        cg.genConst(100, Registers.B, cg.wholeCodeBuilder);
+        cg.genConst(100, Registers.b, cg.wholeCodeBuilder);
 
         assert !cg.wholeCodeBuilder.toString().equals(" ");
         System.out.println(cg.wholeCodeBuilder.toString());
@@ -15,7 +15,7 @@ class CodeGeneratorTest {
 
     @Test
     void mul() {
-        CodeGenerator cg = new CodeGenerator();
+        CodeGenerator cg = new CodeGenerator(new DataHandler());
         Variable var1 = new Variable(1);
         Variable var2 = new Variable(2);
 
@@ -32,7 +32,7 @@ class CodeGeneratorTest {
 
     @Test
     void mod() {
-        CodeGenerator cg = new CodeGenerator();
+        CodeGenerator cg = new CodeGenerator(new DataHandler());
         Variable var1 = new Variable(1);
         Variable var2 = new Variable(2);
 

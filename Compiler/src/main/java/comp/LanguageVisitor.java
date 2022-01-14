@@ -4,12 +4,14 @@ import gen.languageBaseVisitor;
 import gen.languageParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
 {
     DataHandler dataHandler = new DataHandler();
-    CodeGenerator cg = new CodeGenerator();
+    CodeGenerator cg = new CodeGenerator(dataHandler);
+
     String lastPID = "";
     @Override public VisitorDataTransmiter visitDeclare_Start(languageParser.Declare_StartContext ctx)
     {
@@ -72,8 +74,6 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
         VisitorDataTransmiter ret = new VisitorDataTransmiter();
         VisitorDataTransmiter vRec = this.visit(ctx.commands());
         VisitorDataTransmiter vTer = this.visit(ctx.command());
-        ret.offset += vRec.offset;
-        ret.offset += vTer.offset;
         ret.codeHandler.addAll(vRec.codeHandler);
         ret.codeHandler.addAll(vTer.codeHandler);
 
@@ -92,7 +92,6 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
         VisitorDataTransmiter ex = this.visit(ctx.identifier());
         dataHandler.initVariable(lastPID);
         VisitorDataTransmiter v2 = this.visit(ctx.expression());
-        ex.offset += v2.offset;
         ex.codeHandler.addAll(v2.codeHandler);
         ex.offset += cg.assign(ex.variable, ex.codeHandler);
         return (ex);
@@ -102,33 +101,85 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
     public VisitorDataTransmiter visitIf_Statement(languageParser.If_StatementContext ctx)
     {
 
-        return visitChildren(ctx);
+        VisitorDataTransmiter ex = this.visit(ctx.commands());
+        VisitorDataTransmiter cond = this.visit(ctx.condition());
+        VisitorDataTransmiter ret = new VisitorDataTransmiter();
+        ret.offset += cg.if_block(ex.codeHandler.size(), cond.codeHandler);
+        ret.codeHandler.addAll(cond.codeHandler);
+        ret.codeHandler.addAll(ex.codeHandler);
+        return ret;
     }
 
     @Override
     public VisitorDataTransmiter visitIfElse_Statement(languageParser.IfElse_StatementContext ctx)
     {
-        return visitChildren(ctx);
+        VisitorDataTransmiter ifblock = this.visit(ctx.ifblock);
+        VisitorDataTransmiter elseblock = this.visit(ctx.elseblock);
+        VisitorDataTransmiter cond = this.visit(ctx.condition());
+
+        VisitorDataTransmiter ret = new VisitorDataTransmiter();
+        cg.if_else_block_first(ifblock.codeHandler.size(), cond.codeHandler);
+        cg.if_else_block_second(elseblock.codeHandler.size(), ifblock.codeHandler);
+        ret.codeHandler.addAll(cond.codeHandler);
+        ret.codeHandler.addAll(ifblock.codeHandler);
+        ret.codeHandler.addAll(elseblock.codeHandler);
+        return ret;
     }
 
     @Override
     public VisitorDataTransmiter visitWhile_Statement(languageParser.While_StatementContext ctx)
     {
-        return visitChildren(ctx);
+        VisitorDataTransmiter ex = this.visit(ctx.commands());
+        VisitorDataTransmiter cond = this.visit(ctx.condition());
+        VisitorDataTransmiter ret = new VisitorDataTransmiter();
+        cg.while_block_first(ex.codeHandler.size(), cond.codeHandler);
+        cg.while_block_second(ex.codeHandler.size(), cond.codeHandler.size(), ex.codeHandler);
+        ret.codeHandler.addAll(cond.codeHandler);
+        ret.codeHandler.addAll(ex.codeHandler);
+        return ret;
     }
 
     @Override
     public VisitorDataTransmiter visitRepeat_Statement(languageParser.Repeat_StatementContext ctx)
     {
-        return visitChildren(ctx);
+        VisitorDataTransmiter ex = this.visit(ctx.commands());
+        VisitorDataTransmiter cond = this.visit(ctx.condition());
+        VisitorDataTransmiter ret = new VisitorDataTransmiter();
+        cg.repeat_block(ex.codeHandler.size(), cond.codeHandler.size(), cond.codeHandler);
+        ret.codeHandler.addAll(ex.codeHandler);
+        ret.codeHandler.addAll(cond.codeHandler);
+        return ret;
     }
 
     @Override
     public VisitorDataTransmiter visitFor_Statement(languageParser.For_StatementContext ctx)
     {
         dataHandler.addIterator(ctx.PIDENTIFIER().getText());
+        VisitorDataTransmiter var1 = this.visit(ctx.v1);
+        VisitorDataTransmiter var2 = this.visit(ctx.v2);
+        VisitorDataTransmiter com = this.visit(ctx.commands());
+        VisitorDataTransmiter ret = new VisitorDataTransmiter();
+        ArrayList<String> tempHolder = new ArrayList<>();
+        ForLabel label = dataHandler.createForLabel(ctx.PIDENTIFIER().getText(), var1.variable, var2.variable);
+        ret.codeHandler.add("(START FOR)\n");
+        cg.for_block_init(label, ret.codeHandler);
 
-        return visitChildren(ctx);
+        switch (ctx.direction.getText()) {
+            case "TO" -> {
+                cg.for_to_block_first(label, tempHolder);
+                cg.for_to_block_second(label, com.codeHandler, tempHolder.size());
+            }
+            case "DOWNTO" -> {
+                cg.for_downto_block_first(label, tempHolder);
+                cg.for_downto_block_second(label, com.codeHandler, tempHolder.size());
+            }
+        }
+
+        cg.for_block_addJump(com.codeHandler.size(), tempHolder);
+        ret.codeHandler.addAll(tempHolder);
+        ret.codeHandler.addAll(com.codeHandler);
+        ret.codeHandler.add("(END FOR)\n");
+        return ret;
     }
 
     @Override
@@ -136,7 +187,7 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
     {
         VisitorDataTransmiter var = this.visit(ctx.identifier());
         dataHandler.initVariable(lastPID);
-        var.offset += cg.read(var.variable, var.codeHandler);
+        cg.read(var.variable, var.codeHandler);
         return var;
     }
 
@@ -144,7 +195,7 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
     public VisitorDataTransmiter visitWrite_Statement(languageParser.Write_StatementContext ctx)
     {
         VisitorDataTransmiter var = this.visit(ctx.value());
-        var.offset += cg.write(var.variable, var.codeHandler);
+        cg.write(var.variable, var.codeHandler);
         return var;
     }
 
@@ -157,7 +208,7 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
         VisitorDataTransmiter var1 = this.visit(ctx.value());
         VisitorDataTransmiter ret = new VisitorDataTransmiter();
         ret.codeHandler.addAll(var1.codeHandler);
-        ret.offset += cg.getConstant(this.visit(ctx.value()).variable, ret.codeHandler);
+        cg.getConstant(this.visit(ctx.value()).variable, ret.codeHandler);
         return ret;
     }
 
@@ -170,11 +221,11 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
         ret.codeHandler.addAll(var1.codeHandler);
         ret.codeHandler.addAll(var2.codeHandler);
         switch (ctx.operator.getText()) {
-            case "PLUS" -> ret.offset += cg.add(var1.variable ,var2.variable, ret.codeHandler);
-            case "MINUS" -> ret.offset += cg.sub(var1.variable ,var2.variable, ret.codeHandler);
-            case "TIMES" -> ret.offset += cg.mul(var1.variable ,var2.variable, ret.codeHandler);
-            case "DIV" -> ret.offset += cg.div(var1.variable ,var2.variable, ret.codeHandler);
-            case "MOD" -> ret.offset += cg.mod(var1.variable ,var2.variable, ret.codeHandler);
+            case "PLUS" -> cg.add(var1.variable ,var2.variable, ret.codeHandler);
+            case "MINUS" ->  cg.sub(var1.variable ,var2.variable, ret.codeHandler);
+            case "TIMES" -> cg.mul(var1.variable ,var2.variable, ret.codeHandler);
+            case "DIV" -> cg.div(var1.variable ,var2.variable, ret.codeHandler);
+            case "MOD" -> cg.mod(var1.variable ,var2.variable, ret.codeHandler);
         }
         return ret;
     }
@@ -182,8 +233,20 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
     @Override
     public VisitorDataTransmiter visitCalculate_Bool(languageParser.Calculate_BoolContext ctx)
     {
-        //TODO
-        return visitChildren(ctx);
+        VisitorDataTransmiter var1 = this.visit(ctx.left);
+        VisitorDataTransmiter var2 = this.visit(ctx.right);
+        VisitorDataTransmiter ret = new VisitorDataTransmiter();
+        ret.codeHandler.addAll(var1.codeHandler);
+        ret.codeHandler.addAll(var2.codeHandler);
+        switch (ctx.oparator.getText()) {
+            case "EQ" -> cg.eq(var1.variable ,var2.variable, ret.codeHandler);
+            case "NEQ" -> cg.neq(var1.variable ,var2.variable, ret.codeHandler);
+            case "LEQ" -> cg.leq(var1.variable ,var2.variable, ret.codeHandler);
+            case "GEQ" -> cg.geq(var1.variable ,var2.variable, ret.codeHandler);
+            case "LE" -> cg.le(var1.variable ,var2.variable, ret.codeHandler);
+            case "GE" -> cg.ge(var1.variable ,var2.variable, ret.codeHandler);
+        }
+        return ret;
     }
 
     @Override
