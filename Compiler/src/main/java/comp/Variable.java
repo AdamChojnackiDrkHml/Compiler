@@ -9,6 +9,14 @@ public class Variable
     private boolean isSet;
     Symbol symbol;
 
+    //EMPTY WRONG INITIALIZED VARIABLE HOLDER
+    public Variable()
+    {
+        address = 0;
+        value = -1;
+        arrayAddress = -1;
+    }
+
     public Variable(long address)
     {
         this.address = address;

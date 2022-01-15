@@ -1,7 +1,5 @@
 package comp;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -22,12 +20,7 @@ public class CodeGenerator
         wholeCodeBuilder.add("HALT\n");
     }
 
-    void writeCode(String path) throws IOException {
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(System.getProperty("user.dir") + path), StandardCharsets.UTF_8))) {
-            writer.write(wholeCodeBuilder.toString());
-        }
-    }
+
 
 
     /**

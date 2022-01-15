@@ -126,9 +126,22 @@ public class DataHandler
     {
         Symbol sym = DataSymbolMap.get(name);
 
+        if(sym == null)
+        {
+            return null;
+        }
+
         if(!sym.isArray())
         {
             System.out.println(errorTextColor + " " + name + " variable is not an array" + currLine + ":" + currColumn + ".");
+            errorFound = true;
+            errorCounter++;
+            return null;
+        }
+
+        if(sym.getArrayEndIdx() < pos || sym.getArrayBeginIdx() > pos )
+        {
+            System.out.println(errorTextColor + " " + name + "[" + pos + "] out of ponds in " + currLine + ":" + currColumn + ".");
             errorFound = true;
             errorCounter++;
             return null;
@@ -143,6 +156,10 @@ public class DataHandler
         Symbol sym = DataSymbolMap.get(name);
         Symbol pos = DataSymbolMap.get(pos_name);
 
+        if(sym == null || pos == null)
+        {
+            return null;
+        }
         if(!sym.isArray())
         {
             System.out.println(errorTextColor + " " + name + " variable is not an array" + currLine + ":" + currColumn + ".");
@@ -188,7 +205,7 @@ public class DataHandler
         memoryEndPointer--;
     }
 
-    public void initVariable(String name)
+    public Variable initVariable(Variable var, String name)
     {
         if(checkIfSymbolExists(name))
         {
@@ -204,6 +221,12 @@ public class DataHandler
                 sym.setInitialized(true);
             }
         }
+        if(var == null)
+        {
+            return createNonExistingSymbolPlaceHolder();
+        }
+
+        return var;
     }
 
     public boolean checkVariable(String name)
@@ -226,4 +249,16 @@ public class DataHandler
         return new ForLabel(getVariable(iteratorName),start, end);
     }
 
+    public long getErrorCounter() {
+        return errorCounter;
+    }
+
+    public boolean isErrorFound() {
+        return errorFound;
+    }
+
+    public Variable createNonExistingSymbolPlaceHolder()
+    {
+        return new Variable();
+    }
 }

@@ -19,9 +19,9 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
         VisitorDataTransmiter var = this.visit(ctx.commands());
         cg.wholeCodeBuilder.addAll(var.codeHandler);
         cg.writeEnd();
-        //System.out.println(String.join("", cg.wholeCodeBuilder));
         VisitorDataTransmiter ret = new VisitorDataTransmiter();
         ret.codeHandler = cg.wholeCodeBuilder;
+        ret.dh = dataHandler;
         return ret;
     }
 
@@ -32,6 +32,7 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
         cg.writeEnd();
         VisitorDataTransmiter ret = new VisitorDataTransmiter();
         ret.codeHandler = cg.wholeCodeBuilder;
+        ret.dh = dataHandler;
         return ret;
     }
 
@@ -90,7 +91,7 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
     {
 
         VisitorDataTransmiter ex = this.visit(ctx.identifier());
-        dataHandler.initVariable(lastPID);
+        ex.variable = dataHandler.initVariable(ex.variable, lastPID);
         VisitorDataTransmiter v2 = this.visit(ctx.expression());
         ex.codeHandler.addAll(v2.codeHandler);
         ex.offset += cg.assign(ex.variable, ex.codeHandler);
@@ -186,7 +187,6 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
     public VisitorDataTransmiter visitRead_Statement(languageParser.Read_StatementContext ctx)
     {
         VisitorDataTransmiter var = this.visit(ctx.identifier());
-        dataHandler.initVariable(lastPID);
         cg.read(var.variable, var.codeHandler);
         return var;
     }
@@ -207,8 +207,10 @@ public class LanguageVisitor extends languageBaseVisitor<VisitorDataTransmiter>
     {
         VisitorDataTransmiter var1 = this.visit(ctx.value());
         VisitorDataTransmiter ret = new VisitorDataTransmiter();
-        ret.codeHandler.addAll(var1.codeHandler);
-        cg.getConstant(this.visit(ctx.value()).variable, ret.codeHandler);
+        if(var1 != null) {
+            ret.codeHandler.addAll(var1.codeHandler);
+            cg.getConstant(this.visit(ctx.value()).variable, ret.codeHandler);
+        }
         return ret;
     }
 
